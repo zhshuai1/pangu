@@ -5,26 +5,30 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
 
-  <servlet>
-    <servlet-name>mapping</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-
-  <servlet-mapping>
-    <servlet-name>mapping</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>*.txt</url-pattern>
-  </servlet-mapping>
-
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.*</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>pangu</servlet-name>
+    <servlet-class>
+      org.springframework.web.servlet.DispatcherServlet
+    </servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>
+        /WEB-INF/servlet-context.xml
+        /WEB-INF/persistence-context.xml
+      </param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>pangu</servlet-name>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 
 </web-app>
