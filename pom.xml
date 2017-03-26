@@ -128,6 +128,16 @@
       <artifactId>gson</artifactId>
       <version>2.6.2</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
+    <!--remove this dependency since it is only used for study tomcat
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
+      <version>8.5.12</version>
+    </dependency>
+    -->
+
   </dependencies>
   <build>
     <finalName>pangu</finalName>
@@ -139,7 +149,7 @@
         <configuration>
           <path>/pangu</path>
           <server>tomcat</server>
-          <url>http://c.sep.com:8080/manager/text</url>
+          <url>http://a.sep.com:8080/manager/text</url>
           <username>zhshuai1</username>
           <password>000000</password>
         </configuration>
