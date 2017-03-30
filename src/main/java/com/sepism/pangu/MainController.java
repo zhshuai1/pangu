@@ -24,10 +24,10 @@ public class MainController {
         model.addAttribute("url", "world");
         return "test";
     }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login( Model model) {
+        return "login";
+    }
 }
 
-@Getter
-@Setter
-class Hello {
-    private int hello;
-}
