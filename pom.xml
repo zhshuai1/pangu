@@ -140,14 +140,14 @@
 
   </dependencies>
   <build>
-    <finalName>pangu</finalName>
+    <finalName>ROOT</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.1</version>
         <configuration>
-          <path>/pangu</path>
+          <path>/ROOT</path>
           <server>tomcat</server>
           <url>http://a.sep.com:8080/manager/text</url>
           <username>zhshuai1</username>
