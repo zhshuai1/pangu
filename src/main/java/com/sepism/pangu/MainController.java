@@ -23,11 +23,9 @@ public class MainController {
 
     @RequestMapping(value = "/say", method = RequestMethod.GET)
     public String sayHello2(@RequestParam("name") String id, Model model) {
-        ThreadContext.push(UUID.randomUUID().toString());
         log.error("The value of name is {}", id);
         model.addAttribute("url", "world");
         myTest("Aloha!!!");
-        ThreadContext.clearAll();
         return "test";
     }
 
