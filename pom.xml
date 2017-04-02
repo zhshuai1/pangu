@@ -20,7 +20,7 @@
       <version>2.6</version>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
+      <groupId>servletapi</groupId>
       <artifactId>servletapi</artifactId>
       <version>2.4</version>
       <scope>provided</scope>
@@ -140,7 +140,7 @@
         <configuration>
           <path>/ROOT</path>
           <server>tomcat</server>
-          <url>http://a.sep.com:8080/manager/text</url>
+          <url>http://d.sep.com:8080/manager/text</url>
           <username>zhshuai1</username>
           <password>000000</password>
         </configuration>
