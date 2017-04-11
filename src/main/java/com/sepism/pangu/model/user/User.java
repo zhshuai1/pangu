@@ -1,14 +1,23 @@
 package com.sepism.pangu.model.user;
 
-import com.sepism.pangu.model.Address;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Getter
 @Setter
+@Entity
+@Table(name="users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String nickName;
     private String password;
@@ -18,7 +27,8 @@ public class User {
     private Gender gender;
     private Date birthDay;
     private String educationBackground;
-    private Address address;
+    //@Transient
+    //private Address address;
     private int level;
     private int score;
     private Date registerDate;
