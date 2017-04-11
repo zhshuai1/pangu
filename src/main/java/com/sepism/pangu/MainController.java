@@ -34,15 +34,9 @@ public class MainController {
     public String sayHello2(@RequestParam("name") String id, Model model) {
         log.error("The value of name is {}", id);
         model.addAttribute("url", "world");
-        myTest("Aloha!!!");
         return "test";
     }
 
-    private void myTest(String testStr) {
-        log.trace(testStr);
-        EventLogger.logEvent(new StructuredDataMessage(UUID.randomUUID().toString().replaceAll("\\-", ""), testStr, "TYPE"));
-        log.debug("This is a debug message");
-    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @Transactional
