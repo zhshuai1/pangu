@@ -42,7 +42,7 @@ public class MainController {
     @Transactional
     public String login(Model model) {
         Session session = sessionFactory.getCurrentSession();
-        List<User> users = session.createQuery("FROM com.sepism.pangu.model.user.User").list();
+        List<User> users = session.createQuery("FROM User").list();
         log.info(new Gson().toJson(users));
         return "login";
     }
