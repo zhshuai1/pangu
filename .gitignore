@@ -1,4 +1,5 @@
 /target/**/*
 .*
+pangu.iml
 /.idea/*
 !.gitignore
