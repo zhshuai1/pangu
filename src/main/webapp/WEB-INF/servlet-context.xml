@@ -33,5 +33,7 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
+	<bean id="authenticationFilter" class="com.sepism.pangu.filter.AuthenticationFilter"/>
+
 
 </beans>

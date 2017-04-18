@@ -60,9 +60,12 @@
     <dispatcher>INCLUDE</dispatcher>
     -->
   </filter-mapping>
+  <!--By using org.springframework.web.filter.DelegatingFilterProxy, the lifecycle will be managed by spring
+    To make this work, we should add one bean explicitly in spring-context
+  -->
   <filter>
     <filter-name>authenticationFilter</filter-name>
-    <filter-class>com.sepism.pangu.filter.AuthenticationFilter</filter-class>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>authenticationFilter</filter-name>
