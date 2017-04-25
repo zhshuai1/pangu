@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "questions")
 public class Question {
+    @Id
     private long id;
     private String title;
     private Type type;

@@ -1,5 +1,6 @@
 package com.sepism.pangu.util;
 
+import org.apache.commons.lang.Validate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -16,5 +17,11 @@ public final class DateUtil {
 
     public static String toString(Date date) {
         return formatter.print(date.getTime());
+    }
+
+    public static long diff(Date date1, Date date2) {
+        Validate.notNull(date1);
+        Validate.notNull(date2);
+        return date1.getTime() - date2.getTime();
     }
 }

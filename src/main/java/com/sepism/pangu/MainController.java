@@ -1,5 +1,6 @@
 package com.sepism.pangu;
 
+import com.sepism.pangu.constant.RequestAttribute;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.SessionFactory;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Setter
@@ -36,5 +39,16 @@ public class MainController {
 //        log.info(new Gson().toJson(users));
 //        return "login";
 //    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test(HttpServletRequest request) {
+        boolean loggedIn = (Boolean) request.getAttribute(RequestAttribute.LOGGED_IN);
+        if (loggedIn) {
+            return "test";
+        } else {
+            return "login";
+        }
+
+    }
 }
 
