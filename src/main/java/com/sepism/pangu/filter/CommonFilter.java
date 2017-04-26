@@ -33,9 +33,15 @@ public class CommonFilter implements Filter {
                 servletRequest.getRemoteHost(), servletRequest.getRemoteAddr(), servletRequest.getRemotePort());
         Cookie[] cookies = ((HttpServletRequest) servletRequest).getCookies();
         servletRequest.setAttribute(RequestAttribute.LOCALE, new Locale(Locale.CHINESE.getLanguage()));
-        for (Cookie cookie : cookies) {
-            if (CookieName.LOCALE.equals(cookie.getName())) {
-                servletRequest.setAttribute(RequestAttribute.LOCALE, new Locale(cookie.getValue()));
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (CookieName.LOCALE.equals(cookie.getName())) {
+                    try {
+                        servletRequest.setAttribute(RequestAttribute.LOCALE, new Locale(cookie.getValue()));
+                    } catch (Exception e) {
+                        log.warn("Failed to create locale for {}", cookie.getValue());
+                    }
+                }
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);

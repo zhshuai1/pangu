@@ -1,6 +1,7 @@
 package com.sepism.pangu.controller;
 
 import com.sepism.pangu.constant.CookieName;
+import com.sepism.pangu.constant.GlobalConstant;
 import com.sepism.pangu.model.authentication.Session;
 import com.sepism.pangu.model.repository.SessionRepository;
 import com.sepism.pangu.model.repository.UserRepository;
@@ -47,6 +48,7 @@ public class LoginController {
         sessionRepository.save(session);
         Cookie userCookie = new Cookie(CookieName.USER, String.valueOf(user.getId()));
         Cookie tokenCookie = new Cookie(CookieName.TOKEN, token);
+        tokenCookie.setMaxAge(GlobalConstant.COOKIE_EXPIRED_TIME);
         response.addCookie(userCookie);
         response.addCookie(tokenCookie);
         return "test";
