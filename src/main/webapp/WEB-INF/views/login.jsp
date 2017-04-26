@@ -69,28 +69,5 @@
       </form>
     </div> <!-- /container -->
 </body>
-<script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script>
-$(document).ready(function(){
-	$('#get-code').click(function(){
-		var req={
-				'phoneNumber':$('#username').val()
-		};
-		$.ajax({
-			  url: '/guide2/getCode.htm',
-			  method: 'POST',
-			  data: JSON.stringify(req),
-			  headers: {
-			    'Accepts': 'application/json',
-			    'Content-type': 'application/json'
-			  },
-			  success: function (data) {
-			    console.log(data);
-			  }
-			});
-
-	});
-});
-</script>
 </html>
