@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" import="java.util.* , com.sepism.pangu.util.LocaleUtil, com.sepism.pangu.constant.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -50,21 +50,22 @@
     }
     </style>
 </head>
+<% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
 <body>
 	<div class="container" style="margin:40px auto; max-width:330px">
       <form class="form-signin" action="/login" method="POST">
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form-signin-heading"><%= LocaleUtil.localize(locale,"PLEASE_SIGN_IN_001") %></h2>
         <label for="userName" class="sr-only">Email address</label>
-        <input id="userName" name="userName" class="form-control" placeholder="Email address" required="" autofocus="" value="" type="text">
+        <input id="userName" name="userName" class="form-control" placeholder='<%= LocaleUtil.localize(locale,"ACCOUNT_NAME_004") %>' required="" autofocus="" value="" type="text">
         <label for="password" class="sr-only">Password</label>
-        <input id="password" name="password" class="form-control" placeholder="Password" required="" type="password">
+        <input id="password" name="password" class="form-control" placeholder='<%= LocaleUtil.localize(locale,"PASSWORD_005") %>' required="" type="password">
         <div class="checkbox">
           <label>
-            <input value="remember-me" type="checkbox"> Remember me
+            <input value="remember-me" type="checkbox"> <%= LocaleUtil.localize(locale,"REMEMBER_ME_002") %>
           </label>
-          <div style="float:right;"> <a href="#" >Forget password?</a></div>
+          <div style="float:right;"> <a href="#" ><%= LocaleUtil.localize(locale,"FORGET_PASSWORD_003") %></a></div>
         </div>
-        <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-success btn-block" type="submit"><%= LocaleUtil.localize(locale,"SIGN_IN_006") %></button>
       </form>
     </div> <!-- /container -->
 </body>
