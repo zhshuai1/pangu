@@ -69,5 +69,4 @@
       </form>
     </div> <!-- /container -->
 </body>
-<script src="js/bootstrap.min.js"></script>
 </html>
