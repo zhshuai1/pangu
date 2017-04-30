@@ -12,14 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.*;
 import java.io.IOException;
 import java.util.Date;
 
@@ -36,25 +29,9 @@ public class AuthenticationFilter implements Filter {
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        Cookie[] cookies = ((HttpServletRequest) servletRequest).getCookies();
-        String userId = null;
-        String token = null;
-        //The Nullable check if for browser compatibility; for safari, no need to to this check, but for firefox,
-        // QQ and 360, the check is necessary
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                switch (cookie.getName()) {
-                    case CookieName.USER:
-                        userId = cookie.getValue();
-                        break;
-                    case CookieName.TOKEN:
-                        token = cookie.getValue();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+        String userId = (String) servletRequest.getAttribute(CookieName.USER);
+        String token = (String) servletRequest.getAttribute(CookieName.TOKEN);
+
         ThreadContext.push(userId);
         //override the attribute to false in case the user could set the attribute to true
         servletRequest.setAttribute(RequestAttribute.LOGGED_IN, false);
