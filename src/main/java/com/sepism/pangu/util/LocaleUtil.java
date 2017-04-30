@@ -16,13 +16,28 @@ import java.util.Map;
 // too many strings to localization, we should build a service to do this.
 @Log4j2
 public class LocaleUtil {
-    //The following strings will be shown on login page
+    //The following strings will be shown on login page(1-20)
     private static final Map<Locale, String> PLEASE_SIGN_IN_001 = new HashMap<>();
     private static final Map<Locale, String> REMEMBER_ME_002 = new HashMap<>();
     private static final Map<Locale, String> FORGET_PASSWORD_003 = new HashMap<>();
     private static final Map<Locale, String> ACCOUNT_NAME_004 = new HashMap<>();
     private static final Map<Locale, String> PASSWORD_005 = new HashMap<>();
     private static final Map<Locale, String> SIGN_IN_006 = new HashMap<>();
+
+    //The following strings will be shown on register page(21-40)
+    private static final Map<Locale, String> PLEASE_SIGN_IN_021 = new HashMap<>();
+    private static final Map<Locale, String> REMEMBER_ME_022 = new HashMap<>();
+    private static final Map<Locale, String> FORGET_PASSWORD_023 = new HashMap<>();
+    private static final Map<Locale, String> ACCOUNT_NAME_024 = new HashMap<>();
+    private static final Map<Locale, String> PASSWORD_025 = new HashMap<>();
+    private static final Map<Locale, String> SIGN_IN_026 = new HashMap<>();
+
+    //The following strings will be shown on index page(41-80)
+    private static final Map<Locale, String> SEPISM_041 = new HashMap<>();
+    private static final Map<Locale, String> INDEX_042 = new HashMap<>();
+    private static final Map<Locale, String> ANSWER_043 = new HashMap<>();
+    private static final Map<Locale, String> SEARCH_044 = new HashMap<>();
+    private static final Map<Locale, String> ACCOUNT_045 = new HashMap<>();
 
     static {
         PLEASE_SIGN_IN_001.put(Locale.CHINESE, "请登录");
@@ -42,6 +57,22 @@ public class LocaleUtil {
 
         SIGN_IN_006.put(Locale.CHINESE, "登录");
         SIGN_IN_006.put(Locale.ENGLISH, "Sign In");
+
+
+        SEPISM_041.put(Locale.CHINESE,"七棱镜");
+        SEPISM_041.put(Locale.ENGLISH,"Sepism");
+
+        INDEX_042.put(Locale.CHINESE,"主页");
+        INDEX_042.put(Locale.ENGLISH,"Index");
+
+        ANSWER_043.put(Locale.CHINESE,"提交观点");
+        ANSWER_043.put(Locale.ENGLISH,"Submit Opinion");
+
+        SEARCH_044.put(Locale.CHINESE,"搜索");
+        SEARCH_044.put(Locale.ENGLISH,"Search");
+
+        ACCOUNT_045.put(Locale.CHINESE,"我的账户");
+        ACCOUNT_045.put(Locale.ENGLISH,"My Account");
     }
 
     public static String localize(Locale locale, String stringId) {
