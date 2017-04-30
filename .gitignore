@@ -1,5 +1,6 @@
 /target/**/*
 .*
 pangu.iml
+MyTest.java
 /.idea/*
 !.gitignore
