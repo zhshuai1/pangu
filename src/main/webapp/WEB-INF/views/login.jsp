@@ -55,9 +55,9 @@
 	<div class="container" style="margin:40px auto; max-width:330px">
       <form class="form-signin" action="/login" method="POST">
         <h2 class="form-signin-heading"><%= LocaleUtil.localize(locale,"PLEASE_SIGN_IN_001") %></h2>
-        <label for="userName" class="sr-only">Email address</label>
+        <label for="userName" class="sr-only"><%= LocaleUtil.localize(locale,"ACCOUNT_NAME_004") %></label>
         <input id="userName" name="userName" class="form-control" placeholder='<%= LocaleUtil.localize(locale,"ACCOUNT_NAME_004") %>' required="" autofocus="" value="" type="text">
-        <label for="password" class="sr-only">Password</label>
+        <label for="password" class="sr-only"><%= LocaleUtil.localize(locale,"PASSWORD_005") %></label>
         <input id="password" name="password" class="form-control" placeholder='<%= LocaleUtil.localize(locale,"PASSWORD_005") %>' required="" type="password">
         <div class="checkbox">
           <label>
@@ -67,6 +67,6 @@
         </div>
         <button class="btn btn-lg btn-success btn-block" type="submit"><%= LocaleUtil.localize(locale,"SIGN_IN_006") %></button>
       </form>
-    </div> <!-- /container -->
+    </div>
 </body>
 </html>
