@@ -1,12 +1,13 @@
 <%@ page language="java" import="java.util.* , com.sepism.pangu.util.LocaleUtil, com.sepism.pangu.constant.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <html>
+<% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
 	<link rel="shortcut icon" type="image/x-icon" href="icon/sepism.ico" media="screen" />
-	<title>Sepism, Find Unique Yourself</title>
+	<title><%= LocaleUtil.localize(locale,"TITLE_900") %></title>
     <style>
     body {
       padding-top: 40px;
@@ -50,7 +51,6 @@
     }
     </style>
 </head>
-<% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
 <body>
 	<div class="container" style="margin:40px auto; max-width:330px">
       <form class="form-signin" action="/login" method="POST">
@@ -66,6 +66,7 @@
           <div style="float:right;"> <a href="#" ><%= LocaleUtil.localize(locale,"FORGET_PASSWORD_003") %></a></div>
         </div>
         <button class="btn btn-lg btn-success btn-block" type="submit"><%= LocaleUtil.localize(locale,"SIGN_IN_006") %></button>
+        <a href="/register"><%= LocaleUtil.localize(locale,"CREATE_NEW_ACCOUNT_007") %></a>
       </form>
     </div>
 </body>

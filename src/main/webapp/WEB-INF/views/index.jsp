@@ -1,12 +1,13 @@
 <%@ page language="java" import="java.util.* , com.sepism.pangu.util.LocaleUtil, com.sepism.pangu.constant.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <html>
+<% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" href="css/bootstrap.min.css" />
   <link rel="shortcut icon" type="image/x-icon" href="icon/sepism.ico" media="screen" />
-  <title>Sepism, Find Unique Yourself</title>
+  <title><%= LocaleUtil.localize(locale,"TITLE_900") %></title>
   <style>
     body {
       padding-bottom: 20px;
@@ -17,7 +18,6 @@
     }
   </style>
 </head>
-<% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
 <body>
   <nav class="navbar navbar-inverse bg-inverse navbar-toggleable-md">
     <div class="container">

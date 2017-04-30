@@ -16,13 +16,17 @@ import java.util.Map;
 // too many strings to localization, we should build a service to do this.
 @Log4j2
 public class LocaleUtil {
-    //The following strings will be shown on login page(1-20)
+    // The following strings will be used for common
+    private static final Map<Locale,String> TITLE_900=new HashMap<>();
+
+    // The following strings will be shown on login page(1-20)
     private static final Map<Locale, String> PLEASE_SIGN_IN_001 = new HashMap<>();
     private static final Map<Locale, String> REMEMBER_ME_002 = new HashMap<>();
     private static final Map<Locale, String> FORGET_PASSWORD_003 = new HashMap<>();
     private static final Map<Locale, String> ACCOUNT_NAME_004 = new HashMap<>();
     private static final Map<Locale, String> PASSWORD_005 = new HashMap<>();
     private static final Map<Locale, String> SIGN_IN_006 = new HashMap<>();
+    private static final Map<Locale,String> CREATE_NEW_ACCOUNT_007=new HashMap<>();
 
     //The following strings will be shown on register page(21-40)
     private static final Map<Locale, String> PLEASE_SIGN_IN_021 = new HashMap<>();
@@ -40,6 +44,9 @@ public class LocaleUtil {
     private static final Map<Locale, String> ACCOUNT_045 = new HashMap<>();
 
     static {
+        TITLE_900.put(Locale.CHINESE, "七棱镜 - 发现不一样的自己");
+        TITLE_900.put(Locale.ENGLISH, "Sepism - Find Unique Yourself");
+
         PLEASE_SIGN_IN_001.put(Locale.CHINESE, "请登录");
         PLEASE_SIGN_IN_001.put(Locale.ENGLISH, "Please Sign In");
 
@@ -57,6 +64,9 @@ public class LocaleUtil {
 
         SIGN_IN_006.put(Locale.CHINESE, "登录");
         SIGN_IN_006.put(Locale.ENGLISH, "Sign In");
+
+        CREATE_NEW_ACCOUNT_007.put(Locale.CHINESE, "创建新账号");
+        CREATE_NEW_ACCOUNT_007.put(Locale.ENGLISH, "Create new account");
 
 
         SEPISM_041.put(Locale.CHINESE,"七棱镜");
