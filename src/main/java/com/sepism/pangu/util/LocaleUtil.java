@@ -44,44 +44,44 @@ public class LocaleUtil {
     private static final Map<Locale, String> ACCOUNT_045 = new HashMap<>();
 
     static {
-        TITLE_900.put(Locale.CHINESE, "ÆßÀâ¾µ - ·¢ÏÖ²»Ò»ÑùµÄ×Ô¼º");
+        TITLE_900.put(Locale.CHINESE, "ä¸ƒæ£±é•œ - å‘çŽ°ä¸ä¸€æ ·çš„è‡ªå·±");
         TITLE_900.put(Locale.ENGLISH, "Sepism - Find Unique Yourself");
 
-        PLEASE_SIGN_IN_001.put(Locale.CHINESE, "ÇëµÇÂ¼");
+        PLEASE_SIGN_IN_001.put(Locale.CHINESE, "è¯·ç™»å½•");
         PLEASE_SIGN_IN_001.put(Locale.ENGLISH, "Please Sign In");
 
-        REMEMBER_ME_002.put(Locale.CHINESE, "¼Ç×¡ÎÒ");
+        REMEMBER_ME_002.put(Locale.CHINESE, "è®°ä½æˆ‘");
         REMEMBER_ME_002.put(Locale.ENGLISH, "Remember me");
 
-        FORGET_PASSWORD_003.put(Locale.CHINESE, "Íü¼ÇÃÜÂë");
+        FORGET_PASSWORD_003.put(Locale.CHINESE, "å¿˜è®°å¯†ç ");
         FORGET_PASSWORD_003.put(Locale.ENGLISH, "Forget password?");
 
-        ACCOUNT_NAME_004.put(Locale.CHINESE, "ÓÊÏä/ÊÖ»ú/ÓÃ»§Ãû");
+        ACCOUNT_NAME_004.put(Locale.CHINESE, "é‚®ç®±/æ‰‹æœº/ç”¨æˆ·å");
         ACCOUNT_NAME_004.put(Locale.ENGLISH, "Email/Phone/UserName");
 
-        PASSWORD_005.put(Locale.CHINESE, "ÃÜÂë");
+        PASSWORD_005.put(Locale.CHINESE, "å¯†ç ");
         PASSWORD_005.put(Locale.ENGLISH, "Password");
 
-        SIGN_IN_006.put(Locale.CHINESE, "µÇÂ¼");
+        SIGN_IN_006.put(Locale.CHINESE, "ç™»å½•");
         SIGN_IN_006.put(Locale.ENGLISH, "Sign In");
 
-        CREATE_NEW_ACCOUNT_007.put(Locale.CHINESE, "´´½¨ÐÂÕËºÅ");
+        CREATE_NEW_ACCOUNT_007.put(Locale.CHINESE, "åˆ›å»ºæ–°è´¦å·");
         CREATE_NEW_ACCOUNT_007.put(Locale.ENGLISH, "Create new account");
 
 
-        SEPISM_041.put(Locale.CHINESE,"ÆßÀâ¾µ");
+        SEPISM_041.put(Locale.CHINESE,"ä¸ƒæ£±é•œ");
         SEPISM_041.put(Locale.ENGLISH,"Sepism");
 
-        INDEX_042.put(Locale.CHINESE,"Ö÷Ò³");
+        INDEX_042.put(Locale.CHINESE,"ä¸»é¡µ");
         INDEX_042.put(Locale.ENGLISH,"Index");
 
-        ANSWER_043.put(Locale.CHINESE,"Ìá½»¹Ûµã");
+        ANSWER_043.put(Locale.CHINESE,"æäº¤è§‚ç‚¹");
         ANSWER_043.put(Locale.ENGLISH,"Submit Opinion");
 
-        SEARCH_044.put(Locale.CHINESE,"ËÑË÷");
+        SEARCH_044.put(Locale.CHINESE,"æœç´¢");
         SEARCH_044.put(Locale.ENGLISH,"Search");
 
-        ACCOUNT_045.put(Locale.CHINESE,"ÎÒµÄÕË»§");
+        ACCOUNT_045.put(Locale.CHINESE,"æˆ‘çš„è´¦æˆ·");
         ACCOUNT_045.put(Locale.ENGLISH,"My Account");
     }
 
