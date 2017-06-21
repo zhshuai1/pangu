@@ -1,94 +1,114 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java"
+         import="com.sepism.pangu.constant.RequestAttribute , com.sepism.pangu.util.LocaleUtil, java.util.Locale"
+         pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <html>
+<% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="css/bootstrap.min.css" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="css/bootstrap3.css"/>
+    <link rel="stylesheet" href="css/glyphicons.min.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="icon/sepism.ico" media="screen"/>
+    <title><%= LocaleUtil.localize(locale, "TITLE_900") %>
+    </title>
     <style>
-    <style>
-    body {
-      padding-top: 40px;
-      padding-bottom: 40px;
-      background-color: #eee;
-    }
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
 
-    .form-signin {
-      max-width: 330px;
-      padding: 15px;
-      margin: 0 auto;
-    }
-    .form-signin .form-signin-heading,
-    .form-signin .checkbox {
-      margin-bottom: 10px;
-    }
-    .form-signin .checkbox {
-      font-weight: normal;
-    }
-    .form-signin .form-control {
-      position: relative;
-      height: auto;
-      -webkit-box-sizing: border-box;
-         -moz-box-sizing: border-box;
-              box-sizing: border-box;
-      padding: 10px;
-      font-size: 16px;
-    }
-    .form-signin .form-control:focus {
-      z-index: 2;
-    }
-    .form-signin input[type="email"] {
-      margin-bottom: -1px;
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-    .form-signin input[type="password"] {
-      margin-bottom: 10px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
+        .main {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .nav-step {
+            margin: 15px 0;
+        }
+
+        ol.steps li {
+            display: table-cell;
+            border: 1px solid #ddd;
+            margin-left: 15px;
+        }
+
+        ol.steps li:not(first-child) {
+            border-left: 0px;
+        }
+
+        ol.steps li:first-child {
+            border-left: 1px solid #ddd;
+        }
+
+        ol {
+            display: table;
+            list-style: none;
+            width: 100%;
+            padding: 0px;
+        }
+
+        .step-content {
+            display: inline-block;
+            color: #aaa;
+        }
+
+        .step-icon {
+            font-size: 200%;
+        }
+
+        .current-step .step-content {
+            color: #000;
+        }
+
+        .current-step .step-icon {
+            color: #0366d6;
+        }
+
     </style>
 </head>
 <body>
-	<div class="container" style="margin:40px auto; max-width:330px">
-      <form class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="" value="" type="email">
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input id="inputPassword" class="form-control" placeholder="Password" required="" type="password">
-        <div class="checkbox">
-          <label>
-            <input value="remember-me" type="checkbox"> Remember me
-          </label>
-          <div style="float:right;"> <a href="#" >Forget password?</a></div>
-        </div>
-        <button class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
-      </form>
-    </div> <!-- /container -->
-</body>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script>
-$(document).ready(function(){
-	$('#get-code').click(function(){
-		var req={
-				'phoneNumber':$('#username').val()
-		};
-		$.ajax({
-			  url: '/guide2/getCode.htm',
-			  method: 'POST',
-			  data: JSON.stringify(req),
-			  headers: {
-			    'Accepts': 'application/json',
-			    'Content-type': 'application/json'
-			  },
-			  success: function (data) {
-			    console.log(data);
-			  }
-			});
 
-	});
-});
-</script>
+<div class="main">
+    <h1>加入七棱镜</h1>
+    <p>发现不一样的自己</p>
+    <div class="nav-step">
+        <ol class="steps">
+            <li class="current-step">
+                <div class="step-content step-icon">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                </div>
+                <div class="step-content">
+                    第一步：<br>
+                    创建账号
+                </div>
+            </li>
+            <li>
+                <div class="step-content step-icon">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                </div>
+                <div class="step-content">
+                    第二步：<br>
+                    完善个人信息
+                </div>
+            </li>
+            <li>
+                <div class="step-content step-icon">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </div>
+                <div class="step-content">
+                    第三步：<br>
+                    完成！
+                </div>
+            </li>
+        </ol>
+    </div>
+    <div id="register-form container">
+
+    </div>
+
+</div>
+</body>
 </html>
