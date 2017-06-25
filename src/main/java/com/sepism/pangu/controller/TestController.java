@@ -22,6 +22,7 @@ public class TestController {
 
     @ResponseBody
     @RequestMapping(path = "/testQuestion", method = RequestMethod.GET)
+    @Transactional
     public String testQuestion() {
         Question question = questionRepository.findOne(1L);
         return new Gson().toJson(question);

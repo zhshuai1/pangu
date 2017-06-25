@@ -17,7 +17,10 @@ public class Questionnaire {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
+    private String titleEn;
+    //This is the user-facing description
     private String description;
+    private String descriptionEn;
     //Default fetchType is lazy for this. If you want it work properly, you should put @Transactional to the usage
     // method; Or set the fetchType to eager.
     @OneToMany(cascade = {CascadeType.ALL})
@@ -25,4 +28,6 @@ public class Questionnaire {
     private List<Question> questions;
     private long creator;
     private Date creationDate;
+    //This is the internal-facing comment
+    private String comment;
 }

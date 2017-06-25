@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,10 +16,12 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
+    private String titleEn;
     @Enumerated(EnumType.STRING)
     private Type type;
-    // We will make all choices as a json string and then store it.
-    private String choices;
+    @OneToMany
+    @JoinColumn(name = "questionId")
+    private List<Choice> choices;
     private long questionnaireId;
     private Date creationDate;
     private long creator;
