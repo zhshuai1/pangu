@@ -1,6 +1,5 @@
 package com.sepism.pangu.model.question;
 
-import com.sepism.pangu.model.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +21,7 @@ public class Question {
     private String choices;
     private long questionnaireId;
     private Date creationDate;
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "creator")
-    private User creator;
+    private long creator;
 
     public enum Type {
         RADIO, CHECKBOX, VALUE, STRING, OBJECT;
