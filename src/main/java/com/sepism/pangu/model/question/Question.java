@@ -19,6 +19,7 @@ public class Question {
     private String titleEn;
     @Enumerated(EnumType.STRING)
     private Type type;
+    private boolean required;
     @OneToMany
     @JoinColumn(name = "questionId")
     private List<Choice> choices;
@@ -27,6 +28,6 @@ public class Question {
     private long creator;
 
     public enum Type {
-        RADIO, CHECKBOX, VALUE, STRING, OBJECT;
+        RADIO, CHECKBOX, VALUE, TEXT, OBJECT, DATE, ADDRESS, EMAIL, PHONE;
     }
 }
