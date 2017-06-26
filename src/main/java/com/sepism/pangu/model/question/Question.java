@@ -20,8 +20,7 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private Type type;
     private boolean required;
-    @OneToMany
-    @JoinColumn(name = "questionId")
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionId")
     private List<Choice> choices;
     private long questionnaireId;
     private Date creationDate;
