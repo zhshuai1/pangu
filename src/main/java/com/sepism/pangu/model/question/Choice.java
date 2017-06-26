@@ -15,7 +15,7 @@ public class Choice {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private long questionId;
-    private String description;
+    private String descriptionCn;
     private String descriptionEn;
     private Date creationDate;
     private long creator;

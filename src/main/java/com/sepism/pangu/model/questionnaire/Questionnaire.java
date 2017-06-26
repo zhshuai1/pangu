@@ -16,10 +16,10 @@ public class Questionnaire {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String title;
+    private String titleCn;
     private String titleEn;
     //This is the user-facing description
-    private String description;
+    private String descriptionCn;
     private String descriptionEn;
     //Default fetchType is lazy for this. If you want it work properly, you should put @Transactional to the usage
     // method; Or set the fetchType to eager.
