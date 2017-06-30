@@ -80,6 +80,14 @@
             align-items: center;
         }
 
+        #registration {
+            padding: 0px 30px;
+        }
+
+        .btn-submit {
+            margin-top: 30px;
+        }
+
     </style>
 </head>
 <body>
@@ -89,7 +97,7 @@
     <p>发现不一样的自己</p>
     <div class="nav-step">
         <ol class="steps">
-            <li class="current-step">
+            <li class="current-step" id="step1">
                 <div class="step-content step-icon">
                     <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
                 </div>
@@ -98,7 +106,7 @@
                     选择注册方式
                 </div>
             </li>
-            <li>
+            <li id="step2">
                 <div class="step-content step-icon">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                 </div>
@@ -107,7 +115,7 @@
                     创建账号
                 </div>
             </li>
-            <li>
+            <li id="step3">
                 <div class="step-content step-icon">
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                 </div>
@@ -130,39 +138,62 @@
             <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;邮箱
         </div>
     </div>
-    <div id="register-form-phone" style="display: none;">
-        <form method="post" action="/register" id="phone-registration">
-            <label for="username">手机号</label>
-            <div class="input-group">
-                <span class="input-group-addon">+86</span>
-                <input type="text" class="form-control" id="username" name="username">
-            </div>
-            <label for="validation-code">验证码</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="validation-code" name="validation-code">
-                <span class="input-group-addon btn btn-default">获取验证码</span>
-            </div>
-            <label for="password">密码</label>
-            <input type="password" class="form-control" id="password" name="password">
-            <label for="confirm">确认密码</label>
-            <input type="password" class="form-control" id="confirm">
-            <div class="btn-group">
-                <button type="button" class="btn btn-success">创建账户</button>
-                <button type="button" class="btn btn-default">返回</button>
+    <div id="registration" style="display: none;">
+        <form method="post" action="/register" id="registration-form">
+            <label for="password1">密码</label>
+            <input type="password" class="form-control" id="password1" name="password">
+            <label for="confirm1">确认密码</label>
+            <input type="password" class="form-control" id="confirm1">
+            <div class="btn-group btn-group-justified btn-submit">
+                <div class="btn-group">
+                    <button id="btn-create" type="button" class="btn btn-success">创建账户</button>
+                </div>
+                <div class="btn-group">
+                    <button id="btn-cancel" type="button" class="btn btn-default">返回</button>
+                </div>
             </div>
         </form>
+    </div>
+    <div ng-app="questionnaireApp" >
+        <questionnaire></questionnaire>
     </div>
 
 </div>
 </body>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/angular-1.6.4.js"></script>
+<script src="/js/show-questionnaire/show-questionnaire.js"></script>
 <script>
     $(document).ready(function () {
         $(".register-method").click(function () {
-            $("#register-form-phone").show();
+            var usernameId = "#" + $(this).data()["type"] + "-username";
+            $("#registration-form").prepend($($(usernameId).html()));
+            $("#registration").show();
             $("#select-method").hide();
+            $(".steps > li").removeClass("current-step");
+            $("#step2").addClass("current-step");
         });
     });
 </script>
+<template id="phone-username">
+    <label for="username">手机号</label>
+    <div class="input-group">
+        <span class="input-group-addon">+86</span>
+        <input type="text" class="form-control" id="phone-number" name="username">
+    </div>
+    <label for="validation-code">验证码</label>
+    <div class="input-group">
+        <input type="text" class="form-control" id="validation-code" name="validation-code">
+        <span class="input-group-addon btn btn-default">获取验证码</span>
+    </div>
+</template>
+<template id="username-username">
+    <label for="username">用户名</label>
+    <input type="text" class="form-control" id="username" name="username">
+</template>
+<template id="email-username">
+    <label for="username">邮箱</label>
+    <input type="text" class="form-control" id="email" name="username">
+</template>
 </html>
