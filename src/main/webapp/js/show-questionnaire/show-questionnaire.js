@@ -2,7 +2,7 @@ var questionnaireApp = angular.module('questionnaireApp', []);
 questionnaireApp.component("questionnaire", {
     templateUrl:"template/questionnaire.template.html" ,
     controller: function QuestionnaireController($scope) {
-        $scope.questions = [
+        this.questions = [
             {
                 title: "How old are you?",
                 type: "TEXT",

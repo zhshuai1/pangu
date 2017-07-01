@@ -1,5 +1,5 @@
 <ol>
-    <li ng-repeat="question in questions">
+    <li ng-repeat="question in $ctrl.questions">
         <p>{{question.title}}</p>
         <div ng-switch="question.type">
             <div ng-switch-when="TEXT">
