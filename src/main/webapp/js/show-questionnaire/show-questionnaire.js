@@ -1,33 +1,6 @@
 var questionnaireApp = angular.module('questionnaireApp', []);
 questionnaireApp.component("questionnaire", {
-    template: '<ol>' +
-    '<li ng-repeat="question in questions">' +
-    '<p>{{question.title}}</p>' +
-    '<div ng-switch="question.type">' +
-    '<div ng-switch-when="TEXT">' +
-    '<input type="text">' +
-    '</div>' +
-    '<div ng-switch-when="RADIO">' +
-    '<input type="radio">' +
-    '</div>' +
-    '<div ng-switch-when="CHECKBOX">' +
-    '<input type="checkbox">' +
-    '</div>' +
-    '<div ng-switch-when="VALUE">' +
-    '<input type="checkbox">' +
-    '</div>' +
-    '<div ng-switch-when="ADDRESS">' +
-    '<input type="checkbox">' +
-    '</div>' +
-    '<div ng-switch-when="DATE">' +
-    '<input type="text">' +
-    '</div>' +
-    '<div ng-switch-default>' +
-    '<input type="password">' +
-    '</div>' +
-    '</div>' +
-    '</li>' +
-    '</ol>',
+    templateUrl:"template/questionnaire.template.html" ,
     controller: function QuestionnaireController($scope) {
         $scope.questions = [
             {

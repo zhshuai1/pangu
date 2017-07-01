@@ -34,6 +34,12 @@
     <servlet-name>default</servlet-name>
     <url-pattern>*.css</url-pattern>
   </servlet-mapping>
+  <!--This is a workround here. I want to use *.html as the pattern. But after I made this change, the main page is not
+    accessible. This should be related to the welcome-file-list. But I don't know how to fix it.-->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/template/*</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>*.eot</url-pattern>
