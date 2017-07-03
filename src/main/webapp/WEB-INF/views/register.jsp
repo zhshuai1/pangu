@@ -154,8 +154,10 @@
             </div>
         </form>
     </div>
-    <div ng-app="questionnaireApp" >
-        <questionnaire></questionnaire>
+    <div ng-app="questionnaireApp">
+        <div ng-controller="QuestionnaireController as ctrl">
+            <questionnaire questions="ctrl.questions"></questionnaire>
+        </div>
     </div>
 
 </div>
