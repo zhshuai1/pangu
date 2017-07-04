@@ -1,6 +1,6 @@
 <ol>
     <li ng-repeat="question in $ctrl.questions">
-        <p>{{question.titleCn}}</p>
+        <p>{{question[$ctrl.title]}}</p>
         <div ng-switch="question.type">
             <div ng-switch-when="TEXT">
                 <input type="text">

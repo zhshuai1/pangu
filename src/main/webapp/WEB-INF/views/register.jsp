@@ -155,7 +155,10 @@
         </form>
     </div>
     <div ng-app="questionnaireApp">
-        <questionnaire questions questionnaire-id="2"></questionnaire>
+        <%-- In controller, when angular retrieve values from attributes, it will eval the value, so here we should
+        use "'Cn'". After eval, the string will get a string and not a variable name.
+        Besides, here we use JSP comment to avoid this shown to the user.--%>
+        <questionnaire locale="'Cn'" questionnaire-id="2"></questionnaire>
     </div>
 
 </div>

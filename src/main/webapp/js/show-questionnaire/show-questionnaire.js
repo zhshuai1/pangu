@@ -3,11 +3,10 @@ questionnaireApp
     .component('questionnaire', {
         templateUrl: "template/questionnaire.template.html",
         bindings: {
-            questions: '=',
+            locale: '=',
             questionnaireId: '=',
-
         },
-        controller: ['$http', '$scope', function ($http, $scope) {
+        controller: ['$http', function ($http) {
             var self = this;
             // we must put the $http get operation in the $postLink life-cycle.
             // For angular, the initialization of a component should be:
@@ -19,6 +18,7 @@ questionnaireApp
             this.$postLink = function () {
                 $http.get('/questionnaires/' + self.questionnaireId).then(function (response) {
                     self.questions = response.data.questions;
+                    self.title = 'title' + self.locale;
                 });
             }
 
