@@ -155,9 +155,7 @@
         </form>
     </div>
     <div ng-app="questionnaireApp">
-        <div ng-controller="QuestionnaireController as ctrl">
-            <questionnaire questions="ctrl.questions"></questionnaire>
-        </div>
+        <questionnaire questions qnid="2"></questionnaire>
     </div>
 
 </div>
