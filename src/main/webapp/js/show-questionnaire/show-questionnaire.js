@@ -4,7 +4,7 @@ questionnaireApp
         templateUrl: "template/questionnaire.template.html",
         bindings: {
             questions: '=',
-            qnid: '=',
+            questionnaireId: '=',
 
         },
         controller: ['$http', '$scope', function ($http, $scope) {
@@ -17,7 +17,7 @@ questionnaireApp
             // So if we just put the $http in the controller, it will called before angular binding qnid for the scope
             // and controller. We will get an undefined.
             this.$postLink = function () {
-                $http.get('/questionnaires/' + self.qnid).then(function (response) {
+                $http.get('/questionnaires/' + self.questionnaireId).then(function (response) {
                     self.questions = response.data.questions;
                 });
             }
