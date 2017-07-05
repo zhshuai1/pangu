@@ -1,21 +1,25 @@
 <ol>
     <li ng-repeat="question in $ctrl.questions">
-        <p>{{question[$ctrl.title]}}</p>
+        <p>{{$index+1+". "+question[$ctrl.title]}}</p>
         <div ng-switch="question.type">
             <div ng-switch-when="TEXT">
                 <input type="text">
             </div>
             <div ng-switch-when="RADIO">
-                <input type="radio">
+                <div ng-repeat="choice in question.choices">
+                    <input type="radio" name="question.id">{{choice[$ctrl.description]}}
+                </div>
             </div>
             <div ng-switch-when="CHECKBOX">
-                <input type="checkbox">
+                <div ng-repeat="choice in question.choices">
+                    <input type="checkbox" name="question.id">{{choice[$ctrl.description]}}
+                </div>
             </div>
             <div ng-switch-when="VALUE">
                 <input type="checkbox">
             </div>
             <div ng-switch-when="ADDRESS">
-                <input type="checkbox">
+                <input type="text">
             </div>
             <div ng-switch-when="DATE">
                 <input type="text">

@@ -19,9 +19,8 @@ questionnaireApp
                 $http.get('/questionnaires/' + self.questionnaireId).then(function (response) {
                     self.questions = response.data.questions;
                     self.title = 'title' + self.locale;
+                    self.description = 'description' + self.locale;
                 });
             }
-
         }],
-
     });
