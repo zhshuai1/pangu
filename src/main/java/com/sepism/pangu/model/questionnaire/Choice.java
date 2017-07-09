@@ -1,4 +1,4 @@
-package com.sepism.pangu.model.question;
+package com.sepism.pangu.model.questionnaire;
 
 import lombok.Getter;
 import lombok.Setter;

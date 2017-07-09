@@ -1,7 +1,7 @@
 package com.sepism.pangu.controller;
 
 import com.google.gson.Gson;
-import com.sepism.pangu.model.question.Question;
+import com.sepism.pangu.model.questionnaire.Question;
 import com.sepism.pangu.model.questionnaire.Questionnaire;
 import com.sepism.pangu.model.repository.QuestionRepository;
 import com.sepism.pangu.model.repository.QuestionnaireRepository;

@@ -1,5 +1,6 @@
-package com.sepism.pangu.model.question;
+package com.sepism.pangu.model.questionnaire;
 
+import com.sepism.pangu.model.questionnaire.Choice;
 import lombok.Getter;
 import lombok.Setter;
 

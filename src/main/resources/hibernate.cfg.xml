@@ -6,7 +6,7 @@
     <session-factory>
         <mapping class="com.sepism.pangu.model.user.User"/>
         <mapping class="com.sepism.pangu.model.authentication.Session"/>
-        <mapping class="com.sepism.pangu.model.question.Question"/>
+        <mapping class="com.sepism.pangu.model.questionnaire.Question"/>
         <mapping class="com.sepism.pangu.model.questionnaire.Questionnaire"/>
     </session-factory>
 </hibernate-configuration>
