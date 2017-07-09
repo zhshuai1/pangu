@@ -199,13 +199,23 @@
         });
         $("#btn-create").click(function (e) {
             e.preventDefault();
-            var data = $("#registration-form").serialize();
+            var data = {};
+            $("#registration-form").serializeArray().map(function (x) {
+                if (data[x.name] !== undefined) {
+                    if (!data[x.name].push) {
+                        data[x.name] = [data[x.name]];
+                    }
+                    data[x.name].push(x.value || '');
+                } else {
+                    data[x.name] = x.value || '';
+                }
+            });
             $.ajax({
                 url: "/register",
                 type: "POST",
                 dataType: "json",
-                contentType: "application/x-www-form-urlencoded",
-                data: data,
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(data),
                 success: function (response) {
                     $(".steps .step").hide();
                     $("#complete-info").show();
@@ -239,7 +249,7 @@
     </div>
     <label for="validation-code">验证码</label>
     <div class="input-group">
-        <input type="text" class="form-control" id="validation-code" name="validation-code">
+        <input type="text" class="form-control" id="validation-code" name="validationCode">
         <span class="input-group-addon btn btn-default">获取验证码</span>
     </div>
 </template>

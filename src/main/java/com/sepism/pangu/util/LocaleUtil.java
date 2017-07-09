@@ -15,7 +15,7 @@ import java.util.Map;
 // This util should be used only for short term when the localed string number is not that many, after we have
 // too many strings to localization, we should build a service to do this.
 @Log4j2
-public class LocaleUtil {
+public final class LocaleUtil {
     // The following strings will be used for common
     private static final Map<Locale,String> TITLE_900=new HashMap<>();
 
