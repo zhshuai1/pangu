@@ -1,5 +1,6 @@
 package com.sepism.pangu.validate;
 
+import com.sepism.pangu.constant.RegularExpression;
 import com.sepism.pangu.exception.InvalidInputException;
 import com.sepism.pangu.model.register.RegisterRequest;
 import org.apache.commons.lang.StringUtils;
@@ -36,8 +37,8 @@ public class RegisterRequestValidator {
     }
 
     private void validateAndNormalizeUsername(RegisterRequest request) throws InvalidInputException {
-        String usernamePattern = "^[a-zA-Z0-9\\-_\\.@]{6,20}$";
-        String passwordPattern = "^[a-zA-Z0-9\\-_\\.!@#$%^&*()]{6,20}$";
+        String usernamePattern = RegularExpression.USERNAME_PATTERN;
+        String passwordPattern = RegularExpression.PASSWORD_PATTERN;
         switch (request.getType()) {
             case "phone":
                 request.setUsername(request.getUsername().replaceAll("[^0-9]", ""));
