@@ -102,6 +102,11 @@
             <version>1.6.4</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.2.9.Final</version>
@@ -161,15 +166,11 @@
             <version>2.9.9</version>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
-        <!--remove this dependency since it is only used for study tomcat
         <dependency>
-          <groupId>org.apache.tomcat</groupId>
-          <artifactId>tomcat-catalina</artifactId>
-          <version>8.5.12</version>
+            <groupId>com.external.taobao</groupId>
+            <artifactId>taobao-api</artifactId>
+            <version>1.0</version>
         </dependency>
-        -->
 
     </dependencies>
     <build>
