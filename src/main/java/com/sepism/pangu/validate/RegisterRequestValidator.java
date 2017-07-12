@@ -3,6 +3,7 @@ package com.sepism.pangu.validate;
 import com.sepism.pangu.constant.RegularExpression;
 import com.sepism.pangu.exception.InvalidInputException;
 import com.sepism.pangu.model.register.RegisterRequest;
+import com.sepism.pangu.util.DataNormalizer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ public class RegisterRequestValidator {
         String passwordPattern = RegularExpression.PASSWORD_PATTERN;
         switch (request.getType()) {
             case "phone":
-                request.setUsername(request.getUsername().replaceAll("[^0-9]", ""));
+                request.setUsername(DataNormalizer.normalizePhone(request.getUsername()));
                 break;
             case "username":
             case "email":
