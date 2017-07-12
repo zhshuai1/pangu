@@ -8,5 +8,6 @@
         <mapping class="com.sepism.pangu.model.authentication.Session"/>
         <mapping class="com.sepism.pangu.model.questionnaire.Question"/>
         <mapping class="com.sepism.pangu.model.questionnaire.Questionnaire"/>
+        <mapping class="com.sepism.pangu.model.authentication.ValidationCode"/>
     </session-factory>
 </hibernate-configuration>
