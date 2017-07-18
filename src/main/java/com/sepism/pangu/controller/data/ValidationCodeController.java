@@ -4,7 +4,9 @@ import com.sepism.pangu.constant.ErrorCode;
 import com.sepism.pangu.external.SmsSender;
 import com.sepism.pangu.model.authentication.ValidationCode;
 import com.sepism.pangu.model.handler.Response;
+import com.sepism.pangu.model.repository.UserRepository;
 import com.sepism.pangu.model.repository.ValidationCodeRepository;
+import com.sepism.pangu.model.user.User;
 import com.sepism.pangu.util.DataNormalizer;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @Log4j2
@@ -25,6 +28,9 @@ public class ValidationCodeController {
 
     @Autowired
     private SmsSender smsSender;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping(path = "/validationCode", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -36,6 +42,11 @@ public class ValidationCodeController {
         phone = DataNormalizer.normalizePhone(phone);
 
         try {
+            List<User> existedUsers = userRepository.findByNickNameOrEmailOrPhoneNumber(phone, phone, phone);
+            if (existedUsers.size() != 0) {
+                log.warn("The phone number has been registered in sep.");
+                return new Response(ErrorCode.USER_EXIST).serialize();
+            }
             ValidationCode validation = ValidationCode.builder().code(validationCode).phone(phone).lastUpdateTime(new
                     Date()).build();
             validationCodeRepository.save(validation);
