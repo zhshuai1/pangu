@@ -238,6 +238,24 @@
             $("#step1").addClass("current-step");
 
         });
+        $("#holder").on("click", "#get-validation-code", function () {
+            var phone = $("#phone-number").val();
+            $.ajax({
+                url: "/validationCode?phone=" + phone,
+                type: "POST",
+                dataType: "json",
+                success: function (response) {
+                    if (response.errorCode == "SUCCESS") {
+                        alert("Get validation code successfully.");
+                    } else {
+                        alert("Server error.");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Failed to get validation");
+                }
+            });
+        });
     });
 </script>
 <template id="phone-username">
@@ -250,7 +268,7 @@
     <label for="validation-code">验证码</label>
     <div class="input-group">
         <input type="text" class="form-control" id="validation-code" name="validationCode">
-        <span class="input-group-addon btn btn-default">获取验证码</span>
+        <span class="input-group-addon btn btn-default" id="get-validation-code">获取验证码</span>
     </div>
 </template>
 <template id="username-username">
