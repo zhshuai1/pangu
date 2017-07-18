@@ -22,7 +22,7 @@
                 <input type="text">
             </div>
             <div ng-switch-when="DATE">
-                <input type="text">
+                <date min-year="1950" max-year="2050" default-year="1990"></date>
             </div>
             <div ng-switch-default>
                 <input type="password">
