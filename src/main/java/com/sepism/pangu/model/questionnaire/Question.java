@@ -1,6 +1,5 @@
 package com.sepism.pangu.model.questionnaire;
 
-import com.sepism.pangu.model.questionnaire.Choice;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +19,7 @@ public class Question {
     private String titleEn;
     @Enumerated(EnumType.STRING)
     private Type type;
+    private String constraint;
     private boolean required;
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionId")
     private List<Choice> choices;
@@ -28,6 +28,6 @@ public class Question {
     private long creator;
 
     public enum Type {
-        RADIO, CHECKBOX, VALUE, TEXT, OBJECT, DATE, ADDRESS, EMAIL, PHONE;
+        RADIO, CHECKBOX, INTEGER, DOUBLE, TEXT, STRING, OBJECT, DATE, ADDRESS, EMAIL, PHONE;
     }
 }
