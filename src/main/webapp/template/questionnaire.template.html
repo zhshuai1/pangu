@@ -1,9 +1,9 @@
-<ol>
-    <li ng-repeat="question in $ctrl.questions">
+<ol ng-controller="questionnaireController">
+    <li ng-repeat="question in $ctrl.questions" on-finish-render-filters>
         <p>{{$index+1+". "+question[$ctrl.title]}}</p>
-        <div ng-switch="question.type">
+        <div ng-switch="question.type" class="form-group">
             <div ng-switch-when="TEXT">
-                <input type="text">
+                <input type="text" class="form-control" required>
             </div>
             <div ng-switch-when="RADIO">
                 <div ng-repeat="choice in question.choices">
@@ -15,18 +15,25 @@
                     <input type="checkbox" name="question.id">{{choice[$ctrl.description]}}
                 </div>
             </div>
-            <div ng-switch-when="VALUE">
-                <input type="checkbox">
+            <div ng-switch-when="INTEGER">
+                <input type="number" class="form-control" required>
             </div>
             <div ng-switch-when="ADDRESS">
-                <input type="text">
+                <input type="text" class="form-control" required>
             </div>
             <div ng-switch-when="DATE">
                 <date min-year="1950" max-year="2050" default-year="1990"></date>
             </div>
-            <div ng-switch-default>
-                <input type="password">
+            <div ng-switch-when="PHONE">
+                <input type="text" pattern="^[0-9]{3,}$" class="form-control" required>
             </div>
+            <div ng-switch-when="EMAIL">
+                <input type="email" class="form-control" required data-error="This field should has an email.">
+            </div>
+            <div ng-switch-default>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="help-block with-errors"></div>
         </div>
     </li>
 </ol>

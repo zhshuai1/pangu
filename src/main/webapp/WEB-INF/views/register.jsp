@@ -165,7 +165,7 @@
             </form>
         </li>
         <li id="complete-info" class="step">
-            <form method="post" action="/complete-info" ng-app="questionnaireApp">
+            <form method="post" action="/complete-info" ng-app="questionnaireApp" role="form" data-toggle="validator">
                 <%-- In controller, when angular retrieve values from attributes, it will eval the value, so here we should
                 use "'Cn'". After eval, the string will get a string and not a variable name.
                 Besides, here we use JSP comment to avoid this shown to the user.--%>
@@ -178,11 +178,12 @@
             </form>
         </li>
     </ul>
-
 </div>
+
 </body>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap-validator.js"></script>
 <script src="/js/angular-1.6.4.js"></script>
 <script src="/js/show-questionnaire/show-questionnaire.js"></script>
 <script>

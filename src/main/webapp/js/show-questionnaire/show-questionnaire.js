@@ -1,5 +1,22 @@
 var questionnaireApp = angular.module('questionnaireApp', []);
 questionnaireApp
+    .controller('questionnaireController', ['$scope', function ($scope) {
+        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+            $("form").validator("destroy").validator();
+        });
+    }])
+    .directive('onFinishRenderFilters', ['$timeout', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit('ngRepeatFinished');
+                    });
+                }
+            }
+        };
+    }])
     .component('questionnaire', {
         templateUrl: "template/questionnaire.template.html",
         bindings: {
