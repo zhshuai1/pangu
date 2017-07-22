@@ -28,6 +28,6 @@ public class Question {
     private long creator;
 
     public enum Type {
-        RADIO, CHECKBOX, INTEGER, DOUBLE, TEXT, STRING, OBJECT, DATE, ADDRESS, EMAIL, PHONE;
+        RADIO, CHECKBOX, INTEGER, DOUBLE, TEXT, STRING, OBJECT, DATE, ADDRESS, EMAIL, PHONE, SELECT;
     }
 }
