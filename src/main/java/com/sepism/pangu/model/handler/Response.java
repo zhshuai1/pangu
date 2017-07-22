@@ -3,10 +3,14 @@ package com.sepism.pangu.model.handler;
 import com.google.gson.Gson;
 import com.sepism.pangu.constant.ErrorCode;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Response {
     private ErrorCode errorCode;
