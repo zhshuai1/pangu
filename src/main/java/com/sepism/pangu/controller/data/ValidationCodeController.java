@@ -47,11 +47,16 @@ public class ValidationCodeController {
                 log.warn("The phone number has been registered in sep.");
                 return new Response(ErrorCode.USER_EXIST).serialize();
             }
-            ValidationCode validation = ValidationCode.builder().code(validationCode).phone(phone).lastUpdateTime(new
-                    Date()).build();
-            validationCodeRepository.save(validation);
+
             Response response = smsSender.sendSms(phone, validationCode, SmsSender.SmsUsage.REGISTER);
-            log.info("Store validation code and send Sms to user successfully.");
+            if(ErrorCode.SUCCESS.equals(response.getErrorCode())){
+                ValidationCode validation = ValidationCode.builder().code(validationCode).phone(phone).lastUpdateTime(new
+                        Date()).build();
+                validationCodeRepository.save(validation);
+                log.info("Store validation code and send Sms to user successfully.");
+            }else{
+                log.error("Failed to send sms to user or save validation code to db.");
+            }
             return response.serialize();
         } catch (Exception e) {
             log.error("Failed to store the validation code in db.", e);

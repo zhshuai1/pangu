@@ -51,11 +51,13 @@ public class SmsSender {
             rsp = client.execute(req);
         } catch (ApiException e) {
             log.error("Failed to send sms to phone {}", phone, e);
-            throw new ExternalDependencyFailureException("Failed to call Alidayu.", e);
+            return new Response(ErrorCode.INTERNAL_ERROR);
         }
         if (rsp.isSuccess()) {
             log.info("Send sms to customer successfully.", GSON.toJson(rsp));
             return new Response(ErrorCode.SUCCESS);
+        } else if ("15".equals(rsp.getErrorCode())) {
+            return new Response(ErrorCode.INVALID_VALUE, "phone number");
         } else {
             log.warn("The response from ali is {}", GSON.toJson(rsp));
             return new Response(ErrorCode.INTERNAL_ERROR);
