@@ -7,7 +7,7 @@
             </div>
             <div ng-switch-when="RADIO">
                 <div ng-repeat="choice in question.choices">
-                    <input type="radio" name="question.id">{{choice[$ctrl.description]}}
+                    <input type="radio" name="question.id" required>{{choice[$ctrl.description]}}
                 </div>
             </div>
             <div ng-switch-when="CHECKBOX">

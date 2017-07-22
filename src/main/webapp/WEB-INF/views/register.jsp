@@ -1,5 +1,5 @@
 <%@ page language="java"
-         import="com.sepism.pangu.constant.RequestAttribute , com.sepism.pangu.util.LocaleUtil, java.util.Locale"
+         import="com.sepism.pangu.constant.RegularExpression,com.sepism.pangu.constant.RequestAttribute,com.sepism.pangu.util.LocaleUtil,java.util.Locale"
          pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <html>
 <% Locale locale = (Locale) request.getAttribute(RequestAttribute.LOCALE); %>
@@ -150,13 +150,24 @@
         <li id="registration" class="step">
             <form method="post" action="/register" id="registration-form">
                 <div id="holder"></div>
-                <label for="password">密码</label>
-                <input type="password" class="form-control" id="password" name="password">
-                <label for="confirm">确认密码</label>
-                <input type="password" class="form-control" id="confirm">
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           pattern="<%=RegularExpression.PASSWORD_PATTERN%>"
+                           data-error="The password should follow the pattern: <%=RegularExpression.PASSWORD_PATTERN%>"
+                           required>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm">确认密码</label>
+                    <input type="password" class="form-control" id="confirm" data-match="#password"
+                           data-match-error="The confirm password should match with password"
+                           required>
+                    <div class="help-block with-errors"></div>
+                </div>
                 <div class="btn-group btn-group-justified btn-submit">
                     <div class="btn-group">
-                        <button id="btn-create" type="button" class="btn btn-success">创建账户</button>
+                        <button id="btn-create" type="submit" class="btn btn-success">创建账户</button>
                     </div>
                     <div class="btn-group">
                         <button id="btn-cancel" type="button" class="btn btn-default">返回</button>
@@ -170,9 +181,10 @@
                 use "'Cn'". After eval, the string will get a string and not a variable name.
                 Besides, here we use JSP comment to avoid this shown to the user.--%>
                 <questionnaire locale="'Cn'" questionnaire-id="2"></questionnaire>
+                <input type="hidden" name="username" value="" id="complete-info-username">
                 <div class="btn-group btn-group-justified btn-submit">
                     <div class="btn-group">
-                        <button id="btn-complete" type="button" class="btn btn-success">完成</button>
+                        <button id="btn-complete" type="submit" class="btn btn-success">完成</button>
                     </div>
                 </div>
             </form>
@@ -195,11 +207,16 @@
             $("#holder").html($($(usernameId).html()));
             $(".steps .step").hide();
             $("#registration").show();
+            $("#registration-form").validator("destroy").validator();
             $(".steps-nav > li").removeClass("current-step");
             $("#step2").addClass("current-step");
         });
         $("#btn-create").click(function (e) {
             e.preventDefault();
+            console.log(this);
+            if ($(this).hasClass("disabled")) {
+                return;
+            }
             var data = {};
             $("#registration-form").serializeArray().map(function (x) {
                 if (data[x.name] !== undefined) {
@@ -222,6 +239,7 @@
                     $("#complete-info").show();
                     $(".steps-nav > li").removeClass("current-step");
                     $("#step3").addClass("current-step");
+                    $("#complete-info-username").val($("#holder #username").val());
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.status);
@@ -261,25 +279,45 @@
 </script>
 <template id="phone-username">
     <input type="hidden" name="type" value="phone">
-    <label for="username">手机号</label>
-    <div class="input-group">
-        <span class="input-group-addon">+86</span>
-        <input type="text" class="form-control" id="phone-number" name="username">
+    <div class="form-group">
+        <label for="username">手机号</label>
+        <div class="input-group">
+            <span class="input-group-addon">+86</span>
+            <input type="text" class="form-control" id="phone-number" name="username"
+                   pattern="<%=RegularExpression.PHONE_PATTERN%>"
+                   data-error="Phone number should follow the pattern: <%=RegularExpression.PHONE_PATTERN%>"
+                   required>
+        </div>
+        <div class="help-block with-errors"></div>
     </div>
-    <label for="validation-code">验证码</label>
-    <div class="input-group">
-        <input type="text" class="form-control" id="validation-code" name="validationCode">
-        <span class="input-group-addon btn btn-default" id="get-validation-code">获取验证码</span>
+    <div class="form-group">
+        <label for="validation-code">验证码</label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="validation-code" name="validationCode" required>
+            <span class="input-group-addon btn btn-default" id="get-validation-code">获取验证码</span>
+        </div>
+        <div class="help-block with-errors"></div>
     </div>
 </template>
 <template id="username-username">
     <input type="hidden" name="type" value="username">
-    <label for="username">用户名</label>
-    <input type="text" class="form-control" id="username" name="username">
+    <div class="form-group">
+        <label for="username">用户名</label>
+        <input type="text" class="form-control" id="username" name="username"
+               pattern="<%=RegularExpression.USERNAME_PATTERN%>"
+               data-error="Username should follow the pattern: <%=RegularExpression.USERNAME_PATTERN%>"
+               required>
+        <div class="help-block with-errors"></div>
+    </div>
 </template>
 <template id="email-username">
     <input type="hidden" name="type" value="email">
-    <label for="username">邮箱</label>
-    <input type="text" class="form-control" id="email" name="username">
+    <div class="form-group">
+        <label for="username">邮箱</label>
+        <input type="email" class="form-control" id="email" name="username"
+               data-error="You should fill in a valid email address"
+               required>
+        <div class="help-block with-errors"></div>
+    </div>
 </template>
 </html>
