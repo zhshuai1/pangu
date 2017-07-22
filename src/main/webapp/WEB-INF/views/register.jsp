@@ -235,17 +235,27 @@
                 contentType: "application/json;charset=UTF-8",
                 data: JSON.stringify(data),
                 success: function (response) {
-                    $(".steps .step").hide();
-                    $("#complete-info").show();
-                    $(".steps-nav > li").removeClass("current-step");
-                    $("#step3").addClass("current-step");
-                    $("#complete-info-username").val($("#holder #username").val());
+                    var errorCode=response.errorCode;
+                    if (errorCode == "SUCCESS") {
+                        $(".steps .step").hide();
+                        $("#complete-info").show();
+                        $(".steps-nav > li").removeClass("current-step");
+                        $("#step3").addClass("current-step");
+                        $("#complete-info-username").val($("#holder #username").val());
+                    }else if(errorCode=="USER_EXIST"){
+                        alert("The username has been registered.");
+                    }else if(errorCode=="INVALID_INPUT"){
+                        alert("The data you fill in is invalid.");
+                    }else{
+                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.status);
                     console.log(XMLHttpRequest.readyState);
                     console.log(textStatus);
                     console.log(errorThrown);
+                    alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                 }
             });
 
