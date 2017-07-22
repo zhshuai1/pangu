@@ -1,6 +1,7 @@
 package com.sepism.pangu.validate;
 
 import com.sepism.pangu.constant.RegularExpression;
+import com.sepism.pangu.constant.UsernameType;
 import com.sepism.pangu.exception.InvalidInputException;
 import com.sepism.pangu.model.register.RegisterRequest;
 import com.sepism.pangu.util.DataNormalizer;
@@ -28,7 +29,7 @@ public class RegisterRequestValidator {
         if (StringUtils.isBlank(password)) {
             emptyFields.add("password");
         }
-        if ("phone".equals(type) && StringUtils.isBlank(validationCode)) {
+        if (UsernameType.PHONE.equals(type) && StringUtils.isBlank(validationCode)) {
             emptyFields.add("validationCode");
         }
         if (emptyFields.size() != 0) {
@@ -41,11 +42,11 @@ public class RegisterRequestValidator {
         String usernamePattern = RegularExpression.USERNAME_PATTERN;
         String passwordPattern = RegularExpression.PASSWORD_PATTERN;
         switch (request.getType()) {
-            case "phone":
+            case UsernameType.PHONE:
                 request.setUsername(DataNormalizer.normalizePhone(request.getUsername()));
                 break;
-            case "username":
-            case "email":
+            case UsernameType.USERNAME:
+            case UsernameType.EMAIL:
                 request.setUsername(request.getUsername().trim());
                 if (!Pattern.matches(usernamePattern, request.getUsername())) {
                     throw new InvalidInputException("The username should only contain alphanumeric and [-_.@]");
