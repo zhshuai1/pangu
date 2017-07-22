@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name="choices")
 public class Choice {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long questionId;
     private long parent;

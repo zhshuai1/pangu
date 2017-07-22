@@ -14,7 +14,7 @@ import java.util.Date;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nickName;
     private String password;
@@ -27,6 +27,7 @@ public class User {
     private String educationBackground;
     //@Transient
     //private Address address;
+    private boolean isCompleted;
     private int level;
     private int score;
     private Date registerDate;
