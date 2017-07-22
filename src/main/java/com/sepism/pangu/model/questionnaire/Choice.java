@@ -1,15 +1,17 @@
 package com.sepism.pangu.model.questionnaire;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name="choices")
+@Table(name = "choices")
 public class Choice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

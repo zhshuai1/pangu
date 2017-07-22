@@ -1,6 +1,8 @@
 package com.sepism.pangu.controller.data;
 
 import com.google.gson.Gson;
+import com.sepism.pangu.model.questionnaire.Choice;
+import com.sepism.pangu.model.repository.ChoiceRepository;
 import com.sepism.pangu.model.repository.QuestionRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +16,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Log4j2
-public class QuestionController {
+public class ChoiceProvider {
     @Autowired
-    private QuestionRepository questionRepository;
+    private ChoiceRepository choiceRepository;
 
     public static final Gson GSON = new Gson();
 
-    @RequestMapping(path = "/questions/{id}", method = RequestMethod.GET, produces = MediaType
+    @RequestMapping(path = "/choices/{parentId}", method = RequestMethod.GET, produces = MediaType
             .APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public String getQuestion(@PathVariable long id) {
-        return GSON.toJson(questionRepository.getOne(id));
+    public String getChoices(@PathVariable long parentId) {
+        return GSON.toJson(choiceRepository.findByParent(parentId));
 
     }
 }

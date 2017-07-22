@@ -6,6 +6,7 @@
     <session-factory>
         <mapping class="com.sepism.pangu.model.user.User"/>
         <mapping class="com.sepism.pangu.model.authentication.Session"/>
+        <mapping class="com.sepism.pangu.model.questionnaire.Choice"/>
         <mapping class="com.sepism.pangu.model.questionnaire.Question"/>
         <mapping class="com.sepism.pangu.model.questionnaire.Questionnaire"/>
         <mapping class="com.sepism.pangu.model.authentication.ValidationCode"/>
