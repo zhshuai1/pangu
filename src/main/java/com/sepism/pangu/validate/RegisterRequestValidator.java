@@ -44,6 +44,7 @@ public class RegisterRequestValidator {
         switch (request.getType()) {
             case UsernameType.PHONE:
                 request.setUsername(DataNormalizer.normalizePhone(request.getUsername()));
+                request.setValidationCode(request.getValidationCode().trim());
                 break;
             case UsernameType.USERNAME:
             case UsernameType.EMAIL:
@@ -55,7 +56,7 @@ public class RegisterRequestValidator {
             default:
                 throw new InvalidInputException("Invalid register type");
         }
-        request.setValidationCode(request.getValidationCode().trim());
+
         if (!Pattern.matches(passwordPattern, request.getPassword())) {
             throw new InvalidInputException("The password should only contain alphanumeric and [-_.!@#$%^&*()]");
         }
