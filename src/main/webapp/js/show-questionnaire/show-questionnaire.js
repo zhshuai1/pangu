@@ -61,7 +61,51 @@ questionnaireApp
     })
     // I will implement address and date as components first, because they are complex enough. To keep consistency,
     // maybe I should implement all basic elements as components, such as radio, checkbox and so on.
-    .component("address", {})
+    .component("address", {
+        template: "<select ng-model='$ctrl.selectedCountry' ng-change='$ctrl.updateProvinces()'><option ng-repeat='country in $ctrl.countries' value='{{country.id}}'>{{country[$ctrl.description]}}</option></select>" +
+        "<select ng-model='$ctrl.selectedProvince' ng-change='$ctrl.updateCities()'><option ng-repeat='province in $ctrl.provinces' value='{{province.id}}'>{{province[$ctrl.description]}}</option></select>" +
+        "<select ng-model='$ctrl.selectedCity' ng-change='$ctrl.updateDistricts()'><option ng-repeat='city in $ctrl.cities' value='{{city.id}}'>{{city[$ctrl.description]}}</option></select>" +
+        "<select ng-model='$ctrl.selectedDistrict'><option ng-repeat='district in $ctrl.districts' value='{{district.id}}'>{{district[$ctrl.description]}}</option></select>",
+        bindings: {
+            root: '<',
+            level: '<',
+            locale: '<',
+        },
+        controller: ['$http', function ($http) {
+            var self = this;
+
+            this.updateProvinces = function () {
+                $http.get('/choices/' + self.selectedCountry).then(function (response) {
+                    self.provinces = response.data;
+                    self.selectedCity = "";
+                    self.districts = [];
+                });
+            }
+
+            this.updateCities = function () {
+                $http.get('/choices/' + self.selectedProvince).then(function (response) {
+                    self.cities = response.data;
+                    self.districts = [];
+                });
+            }
+            this.updateDistricts = function () {
+                $http.get('/choices/' + self.selectedCity).then(function (response) {
+                    self.districts = response.data;
+                });
+            }
+
+            this.$postLink = function () {
+                var level = self.level;
+                var root = self.root;
+                $http.get('/choices/' + root).then(function (response) {
+                    self.countries = response.data;
+                });
+                self.description = "description" + self.locale;
+                self.selectedCountry = "100";
+                this.updateProvinces();
+            }
+        }],
+    })
     .component("date", {
         template: "<select ng-model='$ctrl.selectedYear' ng-change='$ctrl.updateDays()'><option ng-repeat='year in $ctrl.years' value='{{year}}'>{{year}}</option></select>" +
         "<select ng-model='$ctrl.selectedMonth' ng-change='$ctrl.updateDays()'><option ng-repeat='month in $ctrl.months' value='{{month}}'>{{month}}</option></select>" +

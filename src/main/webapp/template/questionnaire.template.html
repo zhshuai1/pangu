@@ -19,7 +19,7 @@
                 <input type="number" class="form-control" required>
             </div>
             <div ng-switch-when="ADDRESS">
-                <input type="text" class="form-control" required>
+                <address level="4" root="question.choices[0].root" locale="'Cn'"></address>
             </div>
             <div ng-switch-when="DATE">
                 <date min-year="1950" max-year="2050" default-year="1990"></date>
