@@ -185,6 +185,13 @@
             <input type="hidden" name="username" id="complete-info-username">
             <input type="hidden" name="token" id="authentication-token">
         </li>
+        <li id="congratulations" class="step">
+            <div style="text-align: center; margin-top: 50px;">
+                <p><span class="glyphicon glyphicon-ok" aria-hidden="true" style="font-size: 300%"></span></p>
+                <p><a href="/login">恭喜您完成注册，点此登录</a></p>
+            </div>
+
+        </li>
     </ul>
 </div>
 
@@ -208,6 +215,10 @@
             }
         });
         return data;
+    }
+    function completeCallback() {
+        $(".steps .step").hide();
+        $("#congratulations").show();
     }
     $(document).ready(function () {
         $(".steps .step").hide();

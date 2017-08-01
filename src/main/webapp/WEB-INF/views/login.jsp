@@ -15,7 +15,15 @@
         body {
             padding-top: 40px;
             padding-bottom: 40px;
+            background-color: #ddd;
+        }
+
+        .main {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 80px;
             background-color: #eee;
+            border-radius: 10px;
         }
 
         .form-signin {
@@ -40,7 +48,6 @@
             -moz-box-sizing: border-box;
             box-sizing: border-box;
             padding: 10px;
-            font-size: 16px;
         }
 
         .form-signin .form-control:focus {
@@ -61,7 +68,7 @@
     </style>
 </head>
 <body>
-<div class="container" style="margin:40px auto; max-width:330px">
+<div class="container main">
     <form class="form-signin" action="/login" method="POST">
         <h2 class="form-signin-heading"><%= LocaleUtil.localize(locale, "PLEASE_SIGN_IN_001") %>
         </h2>
@@ -83,7 +90,7 @@
                 </a>
             </div>
         </div>
-        <button class="btn btn-lg btn-success btn-block" type="submit"><%= LocaleUtil.localize(locale, "SIGN_IN_006") %>
+        <button class="btn btn-success btn-block" type="submit"><%= LocaleUtil.localize(locale, "SIGN_IN_006") %>
         </button>
         <a href="/register"><%= LocaleUtil.localize(locale, "CREATE_NEW_ACCOUNT_007") %>
         </a>

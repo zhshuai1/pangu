@@ -44,6 +44,11 @@ questionnaireApp
                     } else {
                         alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                     }
+                    // After the complete Action finished, will call a callback defined outside;
+                    // This is not a good practice, just workaround to couple the angular and non-angular;
+                    if (completeCallback) {
+                        completeCallback();
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.status);
@@ -53,6 +58,7 @@ questionnaireApp
                     alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                 }
             });
+            return false;
         }
     }])
     .directive('onFinishRenderFilters', ['$timeout', function ($timeout) {
