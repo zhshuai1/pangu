@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterRequest extends com.sepism.pangu.model.handler.Request {
+public class RegisterRequest extends Request {
     private String type;
     private String username;
     private String validationCode;

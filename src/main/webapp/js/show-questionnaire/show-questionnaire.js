@@ -35,6 +35,18 @@ questionnaireApp
             this.$postLink = function () {
                 $http.get('/questionnaires/' + self.questionnaireId).then(function (response) {
                     self.questions = response.data.questions;
+                    self.questions.forEach(function (question) {
+                        if (question.constraint) {
+                            var constraint = JSON.parse(question.constraint);
+                            question.required = constraint.required;
+                            if (constraint.pattern) {
+                                question.pattern = constraint.pattern;
+                            } else {
+                                question.pattern = "^[^<>]*$";
+                            }
+                        }
+
+                    });
                     self.title = 'title' + self.locale;
                     self.description = 'description' + self.locale;
                 });
@@ -62,14 +74,16 @@ questionnaireApp
     // I will implement address and date as components first, because they are complex enough. To keep consistency,
     // maybe I should implement all basic elements as components, such as radio, checkbox and so on.
     .component("address", {
-        template: "<select ng-model='$ctrl.selectedCountry' ng-change='$ctrl.updateProvinces()'><option ng-repeat='country in $ctrl.countries' value='{{country.id}}'>{{country[$ctrl.description]}}</option></select>" +
-        "<select ng-model='$ctrl.selectedProvince' ng-change='$ctrl.updateCities()'><option ng-repeat='province in $ctrl.provinces' value='{{province.id}}'>{{province[$ctrl.description]}}</option></select>" +
-        "<select ng-model='$ctrl.selectedCity' ng-change='$ctrl.updateDistricts()'><option ng-repeat='city in $ctrl.cities' value='{{city.id}}'>{{city[$ctrl.description]}}</option></select>" +
-        "<select ng-model='$ctrl.selectedDistrict'><option ng-repeat='district in $ctrl.districts' value='{{district.id}}'>{{district[$ctrl.description]}}</option></select>",
+        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.formName}}' value='{{$ctrl.selectedDistrict}}'>" +
+        "<div class='btn-group btn-group-vertical'><select class='btn btn-default form-control' ng-model='$ctrl.selectedCountry' ng-change='$ctrl.updateProvinces()'><option ng-repeat='country in $ctrl.countries' value='{{country.id}}'>{{country[$ctrl.description]}}</option></select>" +
+        "<select class='btn btn-default form-control' ng-model='$ctrl.selectedProvince' ng-change='$ctrl.updateCities()'><option ng-repeat='province in $ctrl.provinces' value='{{province.id}}'>{{province[$ctrl.description]}}</option></select>" +
+        "<select class='btn btn-default form-control' ng-model='$ctrl.selectedCity' ng-change='$ctrl.updateDistricts()'><option ng-repeat='city in $ctrl.cities' value='{{city.id}}'>{{city[$ctrl.description]}}</option></select>" +
+        "<select class='btn btn-default form-control' ng-model='$ctrl.selectedDistrict'><option ng-repeat='district in $ctrl.districts' value='{{district.id}}'>{{district[$ctrl.description]}}</option></select></div></div>",
         bindings: {
             root: '<',
             level: '<',
             locale: '<',
+            formName: '<',
         },
         controller: ['$http', function ($http) {
             var self = this;
@@ -107,13 +121,15 @@ questionnaireApp
         }],
     })
     .component("date", {
-        template: "<select ng-model='$ctrl.selectedYear' ng-change='$ctrl.updateDays()'><option ng-repeat='year in $ctrl.years' value='{{year}}'>{{year}}</option></select>" +
-        "<select ng-model='$ctrl.selectedMonth' ng-change='$ctrl.updateDays()'><option ng-repeat='month in $ctrl.months' value='{{month}}'>{{month}}</option></select>" +
-        "<select ng-model='$ctrl.selectedDay'><option ng-repeat='day in $ctrl.days' value='{{day}}'>{{day}}</option></select>",
+        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.formName}}' value='{{$ctrl.date}}'>" +
+        "<div class='btn-group'><select class='btn btn-default' ng-model='$ctrl.selectedYear' ng-change='$ctrl.update()'><option ng-repeat='year in $ctrl.years' value='{{year}}'>{{year}}</option></select>" +
+        "<select class='btn btn-default' ng-model='$ctrl.selectedMonth' ng-change='$ctrl.update()'><option ng-repeat='month in $ctrl.months' value='{{month}}'>{{month}}</option></select>" +
+        "<select class='btn btn-default' ng-model='$ctrl.selectedDay'><option ng-repeat='day in $ctrl.days' value='{{day}}'>{{day}}</option></select></div></div>",
         bindings: {
             minYear: '<',
             maxYear: '<',
             defaultYear: '<',
+            formName: '<',
         },
         controller: [function () {
             var self = this;
@@ -132,7 +148,7 @@ questionnaireApp
                 }
             }
 
-            this.$postLink = function ($scope) {
+            this.$postLink = function () {
                 self.years = [];
                 self.months = [];
                 self.days31 = [];
@@ -148,11 +164,13 @@ questionnaireApp
                 self.selectedYear = "" + self.defaultYear;
                 self.selectedMonth = "1";
                 self.selectedDay = "1";
-                self.days = getDaysInMonth(self.selectedYear, self.selectedMonth);
+                this.update();
             }
 
-            this.updateDays = function () {
+            this.update = function () {
                 self.days = getDaysInMonth(self.selectedYear, self.selectedMonth);
+                var date = new Date(self.selectedYear, +self.selectedMonth - 1, self.selectedDay);
+                self.date = date.getTime();
             }
         }],
     })

@@ -20,7 +20,6 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private Type type;
     private String constraint;
-    private boolean required;
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionId")
     private List<Choice> choices;
     private long questionnaireId;

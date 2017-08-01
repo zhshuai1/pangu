@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="css/bootstrap3.css"/>
+    <link rel="stylesheet" href="css/sep-style.css"/>
     <link rel="stylesheet" href="css/glyphicons.min.css"/>
     <link rel="shortcut icon" type="image/x-icon" href="icon/sepism.ico" media="screen"/>
     <title><%= LocaleUtil.localize(locale, "TITLE_900") %>
@@ -82,6 +83,7 @@
 
         .steps {
             list-style: none;
+            padding: 10px;
         }
 
         #registration {
@@ -181,12 +183,8 @@
                 use "'Cn'". After eval, the string will get a string and not a variable name.
                 Besides, here we use JSP comment to avoid this shown to the user.--%>
                 <questionnaire locale="'Cn'" questionnaire-id="2"></questionnaire>
-                <input type="hidden" name="username" value="" id="complete-info-username">
-                <div class="btn-group btn-group-justified btn-submit">
-                    <div class="btn-group">
-                        <button id="btn-complete" type="submit" class="btn btn-success">完成</button>
-                    </div>
-                </div>
+                <input type="hidden" name="username" id="complete-info-username">
+                <input type="hidden" name="token" id="authentication-token">
             </form>
         </li>
     </ul>
@@ -199,6 +197,20 @@
 <script src="/js/angular-1.6.4.js"></script>
 <script src="/js/show-questionnaire/show-questionnaire.js"></script>
 <script>
+    function getFormData(selector) {
+        var data = {};
+        $(selector).serializeArray().map(function (x) {
+            if (data[x.name] !== undefined) {
+                if (!data[x.name].push) {
+                    data[x.name] = [data[x.name]];
+                }
+                data[x.name].push(x.value || '');
+            } else {
+                data[x.name] = x.value || '';
+            }
+        });
+        return data;
+    }
     $(document).ready(function () {
         $(".steps .step").hide();
         $("#select-method").show();
@@ -213,21 +225,10 @@
         });
         $("#btn-create").click(function (e) {
             e.preventDefault();
-            console.log(this);
             if ($(this).hasClass("disabled")) {
                 return;
             }
-            var data = {};
-            $("#registration-form").serializeArray().map(function (x) {
-                if (data[x.name] !== undefined) {
-                    if (!data[x.name].push) {
-                        data[x.name] = [data[x.name]];
-                    }
-                    data[x.name].push(x.value || '');
-                } else {
-                    data[x.name] = x.value || '';
-                }
-            });
+            var data = getFormData("#registration-form");
             $.ajax({
                 url: "/register",
                 type: "POST",
@@ -235,18 +236,20 @@
                 contentType: "application/json;charset=UTF-8",
                 data: JSON.stringify(data),
                 success: function (response) {
-                    var errorCode=response.errorCode;
+                    var errorCode = response.errorCode;
+
+                    $(".steps .step").hide();
+                    $("#complete-info").show();
+                    $(".steps-nav > li").removeClass("current-step");
+                    $("#step3").addClass("current-step");
+                    $("#complete-info-username").val($("#holder #username").val());
+                    $("#authentication-token").val(response.relatedFields[0]);
                     if (errorCode == "SUCCESS") {
-                        $(".steps .step").hide();
-                        $("#complete-info").show();
-                        $(".steps-nav > li").removeClass("current-step");
-                        $("#step3").addClass("current-step");
-                        $("#complete-info-username").val($("#holder #username").val());
-                    }else if(errorCode=="USER_EXIST"){
+                    } else if (errorCode == "USER_EXIST") {
                         alert("The username has been registered.");
-                    }else if(errorCode=="INVALID_INPUT"){
+                    } else if (errorCode == "INVALID_INPUT") {
                         alert("The data you fill in is invalid.");
-                    }else{
+                    } else {
                         alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                     }
                 },
@@ -282,6 +285,51 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Failed to get validation");
+                }
+            });
+        });
+        $("#btn-complete").click(function (e) {
+            e.preventDefault();
+
+            $("#complete-info form").validator('validate');
+            if ($(this).hasClass("disabled")) {
+                //return;
+            }
+            // This logic is due to bootstrap-validator does not support the validation for <select>
+            var $selects = $(".sep-select").toArray();
+            for (var i in $selects) {
+                var val = $($selects[i]).find("input[type=hidden]").val();
+                if (!val) {
+                    return;
+                }
+            }
+            var data = getFormData("#complete-info form");
+            console.log(data);
+            $.ajax({
+                url: "/complete-info",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    var errorCode = response.errorCode;
+
+                    if (errorCode == "SUCCESS") {
+                        console.log("register success....");
+                    } else if (errorCode == "USER_EXIST") {
+                        alert("The username has been registered.");
+                    } else if (errorCode == "INVALID_INPUT") {
+                        alert("The data you fill in is invalid.");
+                    } else {
+                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.status);
+                    console.log(XMLHttpRequest.readyState);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                 }
             });
         });
