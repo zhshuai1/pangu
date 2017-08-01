@@ -193,7 +193,7 @@ questionnaireApp
         template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.formName}}' value='{{$ctrl.date}}'>" +
         "<div class='btn-group'><select class='btn btn-default' ng-model='$ctrl.selectedYear' ng-change='$ctrl.update()'><option ng-repeat='year in $ctrl.years' value='{{year}}'>{{year}}</option></select>" +
         "<select class='btn btn-default' ng-model='$ctrl.selectedMonth' ng-change='$ctrl.update()'><option ng-repeat='month in $ctrl.months' value='{{month}}'>{{month}}</option></select>" +
-        "<select class='btn btn-default' ng-model='$ctrl.selectedDay'><option ng-repeat='day in $ctrl.days' value='{{day}}'>{{day}}</option></select></div></div>",
+        "<select class='btn btn-default' ng-model='$ctrl.selectedDay' ng-change='$ctrl.update()'><option ng-repeat='day in $ctrl.days' value='{{day}}'>{{day}}</option></select></div></div>",
         bindings: {
             minYear: '<',
             maxYear: '<',
