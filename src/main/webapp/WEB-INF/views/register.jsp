@@ -182,8 +182,8 @@
             use "'Cn'". After eval, the string will get a string and not a variable name.
             Besides, here we use JSP comment to avoid this shown to the user.--%>
             <questionnaire locale="'Cn'" questionnaire-id="2" url="/complete-info"></questionnaire>
-            <input type="hidden" name="username" id="complete-info-username">
-            <input type="hidden" name="token" id="authentication-token">
+            <input type="hidden" name="username" id="complete-info-username" form="questionnaire-form">
+            <input type="hidden" name="token" id="authentication-token" form="questionnaire-form">
         </li>
         <li id="congratulations" class="step">
             <div style="text-align: center; margin-top: 50px;">
