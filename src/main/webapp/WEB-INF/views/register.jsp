@@ -177,15 +177,13 @@
                 </div>
             </form>
         </li>
-        <li id="complete-info" class="step">
-            <form method="post" action="/complete-info" ng-app="questionnaireApp" role="form" data-toggle="validator">
-                <%-- In controller, when angular retrieve values from attributes, it will eval the value, so here we should
-                use "'Cn'". After eval, the string will get a string and not a variable name.
-                Besides, here we use JSP comment to avoid this shown to the user.--%>
-                <questionnaire locale="'Cn'" questionnaire-id="2"></questionnaire>
-                <input type="hidden" name="username" id="complete-info-username">
-                <input type="hidden" name="token" id="authentication-token">
-            </form>
+        <li id="complete-info" class="step" ng-app="questionnaireApp">
+            <%-- In controller, when angular retrieve values from attributes, it will eval the value, so here we should
+            use "'Cn'". After eval, the string will get a string and not a variable name.
+            Besides, here we use JSP comment to avoid this shown to the user.--%>
+            <questionnaire locale="'Cn'" questionnaire-id="2" url="/complete-info"></questionnaire>
+            <input type="hidden" name="username" id="complete-info-username">
+            <input type="hidden" name="token" id="authentication-token">
         </li>
     </ul>
 </div>
@@ -285,51 +283,6 @@
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Failed to get validation");
-                }
-            });
-        });
-        $("#btn-complete").click(function (e) {
-            e.preventDefault();
-
-            $("#complete-info form").validator('validate');
-            if ($(this).hasClass("disabled")) {
-                //return;
-            }
-            // This logic is due to bootstrap-validator does not support the validation for <select>
-            var $selects = $(".sep-select").toArray();
-            for (var i in $selects) {
-                var val = $($selects[i]).find("input[type=hidden]").val();
-                if (!val) {
-                    return;
-                }
-            }
-            var data = getFormData("#complete-info form");
-            console.log(data);
-            $.ajax({
-                url: "/complete-info",
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json;charset=UTF-8",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    var errorCode = response.errorCode;
-
-                    if (errorCode == "SUCCESS") {
-                        console.log("register success....");
-                    } else if (errorCode == "USER_EXIST") {
-                        alert("The username has been registered.");
-                    } else if (errorCode == "INVALID_INPUT") {
-                        alert("The data you fill in is invalid.");
-                    } else {
-                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(XMLHttpRequest.status);
-                    console.log(XMLHttpRequest.readyState);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                    alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                 }
             });
         });

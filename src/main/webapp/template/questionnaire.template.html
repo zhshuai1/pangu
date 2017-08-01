@@ -1,55 +1,28 @@
-<ol ng-controller="questionnaireController">
-    <li class="question" ng-repeat="question in $ctrl.questions" on-finish-render-filters>
-        <p>{{$index+1+". "+question[$ctrl.title]}}</p>
-        <div ng-switch="question.type" class="form-group">
+<ol>
+    <li ng-repeat="question in $ctrl.questions">
+        <p>{{question.titleCn}}</p>
+        <div ng-switch="question.type">
             <div ng-switch-when="TEXT">
-                <input type="text" name="{{question.id}}" class="form-control" ng-required="{{question.required}}"
-                       pattern="{{question.pattern}}">
+                <input type="text">
             </div>
-            <div ng-switch-when="RADIO" class="radio">
-                <div ng-repeat="choice in question.choices">
-                    <label>
-                        <input type="radio" name="{{question.id}}" value="{{choice.id}}"
-                               ng-required="{{question.required}}">{{choice[$ctrl.description]}}
-                    </label>
-                </div>
+            <div ng-switch-when="RADIO">
+                <input type="radio">
             </div>
-            <div ng-switch-when="CHECKBOX" class="checkbox">
-                <div ng-repeat="choice in question.choices">
-                    <label>
-                        <input type="checkbox" name="{{question.id}}" value="{{choice.id}}"
-                               ng-required="{{question.required}}">{{choice[$ctrl.description]}}
-                    </label>
-                </div>
+            <div ng-switch-when="CHECKBOX">
+                <input type="checkbox">
             </div>
-            <div ng-switch-when="INTEGER">
-                <input type="number" name="{{question.id}}" class="form-control" ng-required="{{question.required}}">
+            <div ng-switch-when="VALUE">
+                <input type="checkbox">
             </div>
             <div ng-switch-when="ADDRESS">
-                <address form-name="question.id" level="4" root="question.choices[0].root" locale="'Cn'"
-                         ng-model="$ctrl.selectedDistrict"></address>
+                <input type="checkbox">
             </div>
             <div ng-switch-when="DATE">
-                <date form-name="question.id" min-year="1950" max-year="2050" default-year="1990"
-                      ng-model="$ctrl.birthDay"></date>
-            </div>
-            <div ng-switch-when="PHONE">
-                <input name="{{question.id}}" type="text" pattern="^[0-9]{11}$" class="form-control"
-                       ng-required="{{question.required}}">
-            </div>
-            <div ng-switch-when="EMAIL">
-                <input name="{{question.id}}" type="email" class="form-control" ng-required="{{question.required}}"
-                       data-error="This field should has an email.">
+                <input type="text">
             </div>
             <div ng-switch-default>
-                <input name="{{question.id}}" type="text" class="form-control" ng-required="{{question.required}}">
+                <input type="password">
             </div>
-            <div class="help-block with-errors"></div>
         </div>
     </li>
 </ol>
-<div class="btn-group btn-group-justified btn-submit">
-    <div class="btn-group">
-        <button id="btn-complete" type="submit" class="btn btn-success">完成</button>
-    </div>
-</div>

@@ -5,3 +5,13 @@
     margin-bottom: 10px;
     padding: 10px;
 }
+
+.errored-form-control {
+    border: #a94442 1px solid;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    border-radius: 4px;
+}
+
+.sep-select {
+    display: inline-block;
+}

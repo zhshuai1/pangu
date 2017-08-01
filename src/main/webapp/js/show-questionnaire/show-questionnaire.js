@@ -4,6 +4,56 @@ questionnaireApp
         $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
             $("form").validator("destroy").validator();
         });
+        $scope.onSubmit = function () {
+
+            $(".sep-form").validator('validate');
+            if ($(this).hasClass("disabled")) {
+                return;
+            }
+            // This logic is due to bootstrap-validator does not support the validation for <select>
+            var $selects = $(".sep-select").toArray();
+            var valid = true;
+            for (var i in $selects) {
+                var val = $($selects[i]).find("input[type=hidden]").val();
+                if (!val) {
+                    $($selects[i]).addClass("errored-form-control");
+                    valid = false;
+                } else {
+                    $($selects[i]).removeClass("errored-form-control");
+                }
+            }
+            if (!valid) return;
+            //currently the submit gather all form data with this function, will refactor will ng-model.
+            var data = getFormData("#complete-info form");
+            console.log(data);
+            $.ajax({
+                url: "/complete-info",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    var errorCode = response.errorCode;
+
+                    if (errorCode == "SUCCESS") {
+                        console.log("register success....");
+                    } else if (errorCode == "USER_EXIST") {
+                        alert("The username has been registered.");
+                    } else if (errorCode == "INVALID_INPUT") {
+                        alert("The data you fill in is invalid.");
+                    } else {
+                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.status);
+                    console.log(XMLHttpRequest.readyState);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                }
+            });
+        }
     }])
     .directive('onFinishRenderFilters', ['$timeout', function ($timeout) {
         return {
@@ -53,7 +103,20 @@ questionnaireApp
             }
         }],
     })
+    .component("sepSelect", {
+        template: "<select class='btn btn-default'>" +
+        "<input type='hidden' value='{{$ctrl.defaultValue}}' name='{{$ctrl.questionId}}'" +
+        "<option ng-repeat='choice in $ctrl.choices' value='{{choice.id}}'>{{choice[$ctrl.description]}}</option>" +
+        "</select>",
+        bindings: {
+            choices: '=',
+            questionId: '=',
+            defaultValue: '',
+        },
+        controller: [function () {
 
+        }],
+    })
     // This component is not used yet.
     .component("timer", {
         template: "<span id='timer'>Left time: {{$ctrl.current}}</span>",
@@ -75,10 +138,10 @@ questionnaireApp
     // maybe I should implement all basic elements as components, such as radio, checkbox and so on.
     .component("address", {
         template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.formName}}' value='{{$ctrl.selectedDistrict}}'>" +
-        "<div class='btn-group btn-group-vertical'><select class='btn btn-default form-control' ng-model='$ctrl.selectedCountry' ng-change='$ctrl.updateProvinces()'><option ng-repeat='country in $ctrl.countries' value='{{country.id}}'>{{country[$ctrl.description]}}</option></select>" +
-        "<select class='btn btn-default form-control' ng-model='$ctrl.selectedProvince' ng-change='$ctrl.updateCities()'><option ng-repeat='province in $ctrl.provinces' value='{{province.id}}'>{{province[$ctrl.description]}}</option></select>" +
-        "<select class='btn btn-default form-control' ng-model='$ctrl.selectedCity' ng-change='$ctrl.updateDistricts()'><option ng-repeat='city in $ctrl.cities' value='{{city.id}}'>{{city[$ctrl.description]}}</option></select>" +
-        "<select class='btn btn-default form-control' ng-model='$ctrl.selectedDistrict'><option ng-repeat='district in $ctrl.districts' value='{{district.id}}'>{{district[$ctrl.description]}}</option></select></div></div>",
+        "<div class='btn-group btn-group-vertical'><select class='btn btn-default' ng-model='$ctrl.selectedCountry' ng-change='$ctrl.updateProvinces()'><option ng-repeat='country in $ctrl.countries' value='{{country.id}}'>{{country[$ctrl.description]}}</option></select>" +
+        "<select class='btn btn-default' ng-model='$ctrl.selectedProvince' ng-change='$ctrl.updateCities()'><option ng-repeat='province in $ctrl.provinces' value='{{province.id}}'>{{province[$ctrl.description]}}</option></select>" +
+        "<select class='btn btn-default' ng-model='$ctrl.selectedCity' ng-change='$ctrl.updateDistricts()'><option ng-repeat='city in $ctrl.cities' value='{{city.id}}'>{{city[$ctrl.description]}}</option></select>" +
+        "<select class='btn btn-default' ng-model='$ctrl.selectedDistrict'><option ng-repeat='district in $ctrl.districts' value='{{district.id}}'>{{district[$ctrl.description]}}</option></select></div></div>",
         bindings: {
             root: '<',
             level: '<',
