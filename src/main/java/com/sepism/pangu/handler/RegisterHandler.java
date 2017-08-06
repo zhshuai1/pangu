@@ -53,6 +53,7 @@ public class RegisterHandler extends SepHandler {
         String username = registerRequest.getUsername();
         List<User> usersExisted = userRepository.findByNickNameOrEmailOrPhoneNumber(username, username, username);
         if (usersExisted.size() != 0) {
+            log.info("The requested username [{}] has already been registered.", username);
             return new Response(ErrorCode.USER_EXIST, "username");
         }
         String type = registerRequest.getType();
@@ -70,7 +71,7 @@ public class RegisterHandler extends SepHandler {
                         || !validationCodeRecord.getCode().equals(validationCode)
                         || (DateUtil.diff(new Date(), validationCodeRecord.getLastUpdateTime())
                         > GlobalConstant.VALIDATIONCODE_EXPIRED_TIME)) {
-                    throw new InvalidInputException("The validation code is not valid");
+                    throw new InvalidInputException("The validation code is not valid or expired.");
                 }
                 user.setPhoneNumber(username);
                 break;
