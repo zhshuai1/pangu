@@ -246,20 +246,19 @@
                 data: JSON.stringify(data),
                 success: function (response) {
                     var errorCode = response.errorCode;
-
-                    $(".steps .step").hide();
-                    $("#complete-info").show();
-                    $(".steps-nav > li").removeClass("current-step");
-                    $("#step3").addClass("current-step");
-                    $("#complete-info-username").val($("#holder #username").val());
-                    $("#authentication-token").val(response.relatedFields[0]);
                     if (errorCode == "SUCCESS") {
+                        $(".steps .step").hide();
+                        $("#complete-info").show();
+                        $(".steps-nav > li").removeClass("current-step");
+                        $("#step3").addClass("current-step");
+                        $("#complete-info-username").val(response.userId);
+                        $("#authentication-token").val(response.token);
                     } else if (errorCode == "USER_EXIST") {
-                        alert("The username has been registered.");
+                        alert("该用户名已被注册.");
                     } else if (errorCode == "INVALID_INPUT") {
-                        alert("The data you fill in is invalid.");
+                        alert("您填入的信息包含无效的信息.");
                     } else {
-                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                        alert("啊哦，出现了未知的问题，请联系: zh_ang_ok@yeah.net");
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -267,7 +266,7 @@
                     console.log(XMLHttpRequest.readyState);
                     console.log(textStatus);
                     console.log(errorThrown);
-                    alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                    alert("啊哦，出现了未知的问题，请联系: zh_ang_ok@yeah.net");
                 }
             });
 
@@ -287,13 +286,13 @@
                 dataType: "json",
                 success: function (response) {
                     if (response.errorCode == "SUCCESS") {
-                        alert("Get validation code successfully.");
+                        alert("获取验证码成功.");
                     } else {
-                        alert("Server error.");
+                        alert("服务器异常，请联系zh_ang_ok@yeah.net.");
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Failed to get validation");
+                    alert("获取验证码失败，请联系zh_ang_ok@yeah.net");
                 }
             });
         });

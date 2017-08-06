@@ -7,8 +7,7 @@ import java.util.regex.Pattern;
 public class PatternConstraint extends DataConstraint {
 
     @Override
-    public void validate(String value) throws InvalidInputException {
-        super.validate(value);
+    protected void furtherValidate(String value) throws InvalidInputException {
         try {
             Pattern.compile(value);
         } catch (Exception e) {

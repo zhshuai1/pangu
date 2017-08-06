@@ -9,9 +9,9 @@ import com.sepism.pangu.exception.InternalException;
 import com.sepism.pangu.exception.InvalidInputException;
 import com.sepism.pangu.model.authentication.Session;
 import com.sepism.pangu.model.authentication.ValidationCode;
-import com.sepism.pangu.model.handler.Request;
+import com.sepism.pangu.model.handler.RegisterRequest;
+import com.sepism.pangu.model.handler.RegisterResponse;
 import com.sepism.pangu.model.handler.Response;
-import com.sepism.pangu.model.register.RegisterRequest;
 import com.sepism.pangu.model.repository.SessionRepository;
 import com.sepism.pangu.model.repository.UserRepository;
 import com.sepism.pangu.model.repository.ValidationCodeRepository;
@@ -44,8 +44,9 @@ public class RegisterHandler extends SepHandler {
     private SessionRepository sessionRepository;
 
     @Override
-    public Response process(Request request) throws InvalidInputException, InternalException {
-        RegisterRequest registerRequest = (RegisterRequest) request;
+    protected Response process(String data) throws InvalidInputException, InternalException {
+        RegisterRequest request = GSON.fromJson(data, RegisterRequest.class);
+        RegisterRequest registerRequest = request;
         registerRequestValidator.validateAndNormalize(registerRequest);
         log.info("The request after validate and normalize is: [{}]", GSON.toJson(registerRequest));
         //username has been validated in the validator, so no need to check the nullability.
@@ -57,7 +58,7 @@ public class RegisterHandler extends SepHandler {
         String type = registerRequest.getType();
         String password = registerRequest.getPassword();
         String validationCode = registerRequest.getValidationCode();
-        User user = User.builder().nickName(username).password(password).build();
+        User user = User.builder().nickName(username).password(password).registerDate(new Date()).build();
         switch (type) {
             case UsernameType.EMAIL:
                 user.setEmail(username);
@@ -85,6 +86,9 @@ public class RegisterHandler extends SepHandler {
         String token = UUID.randomUUID().toString();
         Session session = Session.builder().id(user.getId()).token(token).lastAccessTime(new Date()).build();
         sessionRepository.save(session);
-        return new Response(ErrorCode.SUCCESS, token);
+        RegisterResponse response = new RegisterResponse(ErrorCode.SUCCESS, token);
+        response.setToken(token);
+        response.setUserId(String.valueOf(user.getId()));
+        return response;
     }
 }

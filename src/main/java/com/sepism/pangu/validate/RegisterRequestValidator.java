@@ -3,7 +3,7 @@ package com.sepism.pangu.validate;
 import com.sepism.pangu.constant.RegularExpression;
 import com.sepism.pangu.constant.UsernameType;
 import com.sepism.pangu.exception.InvalidInputException;
-import com.sepism.pangu.model.register.RegisterRequest;
+import com.sepism.pangu.model.handler.RegisterRequest;
 import com.sepism.pangu.util.DataNormalizer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;

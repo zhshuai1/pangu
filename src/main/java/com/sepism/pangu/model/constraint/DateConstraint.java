@@ -11,8 +11,7 @@ import java.util.Date;
 public class DateConstraint extends DataConstraint {
 
     @Override
-    public void validate(String value) throws InvalidInputException {
-        super.validate(value);
+    protected void furtherValidate(String value) throws InvalidInputException {
         try {
             new Date(Long.valueOf(value));
         } catch (Exception e) {

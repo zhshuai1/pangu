@@ -1,6 +1,5 @@
-package com.sepism.pangu.model.register;
+package com.sepism.pangu.model.handler;
 
-import com.sepism.pangu.model.handler.Request;
 import lombok.Getter;
 import lombok.Setter;
 

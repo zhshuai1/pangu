@@ -3,6 +3,7 @@ package com.sepism.pangu.model.constraint;
 import com.sepism.pangu.exception.InvalidInputException;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.regex.Pattern;
 
@@ -12,8 +13,11 @@ public class StringConstraint extends DataConstraint {
     private String pattern;
 
     @Override
-    public void validate(String value) throws InvalidInputException {
-        super.validate(value);
+    protected void furtherValidate(String value) throws InvalidInputException {
+        if (StringUtils.isBlank(pattern)) {
+            // if the pattern is null, we think it is valid for any input.
+            return;
+        }
         if (!Pattern.matches(pattern, value)) {
             throw new InvalidInputException(String.format("The value [%s] should match the pattern [%s]",
                     value, pattern));

@@ -25,8 +25,8 @@ public class User {
     private Gender gender;
     private Date birthDay;
     private String educationBackground;
-    //@Transient
-    //private Address address;
+    private long originAddress;
+    private long currentAddress;
     private boolean isCompleted;
     private int level;
     private int score;

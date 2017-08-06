@@ -5,21 +5,19 @@ import com.sepism.pangu.constant.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Arrays;
-import java.util.List;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public final class Response {
+public class Response {
+    protected final static Gson GSON = new Gson();
     private ErrorCode errorCode;
-    private List<String> relatedFields;
-    private final static Gson GSON = new Gson();
+    private String errorMessage;
 
-    public Response(ErrorCode errorCode, String... fields) {
+    public Response(ErrorCode errorCode) {
         this.errorCode = errorCode;
-        this.relatedFields = Arrays.asList(fields);
     }
 
     public String serialize() {

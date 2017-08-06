@@ -36,7 +36,11 @@ questionnaireApp
                     var errorCode = response.errorCode;
 
                     if (errorCode == "SUCCESS") {
-                        console.log("register success....");
+                        // After the complete Action finished, will call a callback defined outside;
+                        // This is not a good practice, just workaround to couple the angular and non-angular;
+                        if (completeCallback) {
+                            completeCallback();
+                        }
                     } else if (errorCode == "USER_EXIST") {
                         alert("The username has been registered.");
                     } else if (errorCode == "INVALID_INPUT") {
@@ -44,11 +48,7 @@ questionnaireApp
                     } else {
                         alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                     }
-                    // After the complete Action finished, will call a callback defined outside;
-                    // This is not a good practice, just workaround to couple the angular and non-angular;
-                    if (completeCallback) {
-                        completeCallback();
-                    }
+
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.status);
