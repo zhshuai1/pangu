@@ -28,4 +28,5 @@ public class Questionnaire {
     private Date creationDate;
     //This is the internal-facing comment
     private String comment;
+    private long hot;
 }
