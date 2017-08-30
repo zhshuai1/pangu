@@ -17,18 +17,31 @@
         .navbar {
             margin-bottom: 20px;
         }
+
+        ul, li {
+            list-style: none;
+            display: block;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
 <%@ include file="head.jsp" %>
-<div class="container">
-    <div class="jumbotron">
+<div class="container" ng-app="viewQuestionnairesApp">
+    <div class="jumbotron" ng-controller="viewQuestionnairesController">
+        <ul>
+            <li ng-repeat="questionnaire in questionnaires" class="btn btn-default form-control">
+                <a href="/questionnaires/{{questionnaire.id}}">{{questionnaire.titleCn}}</a>
+            </li>
+        </ul>
     </div>
 </div>
 <%@include file="foot.jsp" %>
 </body>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="/js/angular-1.6.4.js"></script>
+<script src="/js/show-questionnaire/view-questionnairelist.js"></script>
 <script>
 </script>
 </html>

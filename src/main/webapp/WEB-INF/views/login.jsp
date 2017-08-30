@@ -96,5 +96,6 @@
         </a>
     </form>
 </div>
+<%@include file="foot.jsp" %>
 </body>
 </html>

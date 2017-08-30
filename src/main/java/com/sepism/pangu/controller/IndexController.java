@@ -8,6 +8,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class IndexController {
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String index() {
+        return viewIndex();
+    }
+
+    @RequestMapping(path = "/index", method = RequestMethod.GET)
+    public String viewIndex() {
         return "index";
+    }
+
+    @RequestMapping(path = "/viewQuestionnaires", method = RequestMethod.GET)
+    public String viewQuestionnaires() {
+        return "viewQuestionnaires";
+    }
+
+    @RequestMapping(path = "/account", method = RequestMethod.GET)
+    public String account() {
+        return "account";
     }
 }
