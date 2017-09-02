@@ -1,4 +1,4 @@
-package com.sepism.pangu.controller;
+package com.sepism.pangu.controller.page;
 
 import com.google.gson.Gson;
 import com.sepism.pangu.handler.SepHandler;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Log4j2
 @Controller
-public class RegisterController {
+public class RegisterPageController {
 
     private static final Gson GSON = new Gson();
     @Autowired

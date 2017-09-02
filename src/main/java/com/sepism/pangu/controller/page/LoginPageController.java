@@ -1,4 +1,4 @@
-package com.sepism.pangu.controller;
+package com.sepism.pangu.controller.page;
 
 import com.sepism.pangu.constant.CookieName;
 import com.sepism.pangu.constant.GlobalConstant;
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @Controller
 @Log4j2
-public class LoginController {
+public class LoginPageController {
     @Autowired
     private UserRepository userRepository;
 
