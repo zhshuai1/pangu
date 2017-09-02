@@ -24,6 +24,7 @@ public class RegisterPageController {
 
     @RequestMapping(path = "/register", method = RequestMethod.GET)
     public String getRegisterPage() {
+        log.info("User is accessing the register page.");
         return "register";
     }
 

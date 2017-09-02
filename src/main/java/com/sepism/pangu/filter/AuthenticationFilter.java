@@ -47,7 +47,11 @@ public class AuthenticationFilter implements Filter {
                 servletRequest.setAttribute(RequestAttribute.LOGGED_IN, true);
                 session.setLastAccessTime(new Date());
                 sessionRepository.save(session);
+            } else {
+                log.debug("The request has log in info, but the token either not match or expired.");
             }
+        } else {
+            log.debug("This request with no log in info");
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

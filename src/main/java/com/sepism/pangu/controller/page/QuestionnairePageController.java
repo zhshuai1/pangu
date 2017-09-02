@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class QuestionnairePageController {
     @RequestMapping(path = "/questionnairePage/{id}", method = RequestMethod.GET)
     public String getQuestionnairePage(@PathVariable String id, Model model) {
+        log.info("user is accessing the questionnaire submission page.");
         model.addAttribute("id", id);
         return "questionnairePage";
     }

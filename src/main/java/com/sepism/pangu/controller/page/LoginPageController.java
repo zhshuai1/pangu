@@ -9,7 +9,6 @@ import com.sepism.pangu.model.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,8 +35,9 @@ public class LoginPageController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestParam String userName, @RequestParam String password, HttpServletResponse response,
-                        Model model) {
+    public String login(@RequestParam String userName, @RequestParam String password, HttpServletResponse response) {
+        log.info("User {} is accessing the login page.", userName);
+
         List<User> users = userRepository.findByNickNameOrEmailOrPhoneNumber(userName, userName, userName);
         if (CollectionUtils.isEmpty(users) || !users.get(0).getPassword().equals(password)) {
             return "login";
