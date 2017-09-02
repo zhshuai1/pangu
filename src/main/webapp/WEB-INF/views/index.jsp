@@ -4,7 +4,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap3.css"/>
+    <link rel="stylesheet" href="/css/sep-style.css"/>
     <link rel="shortcut icon" type="image/x-icon" href="icon/sepism.ico" media="screen"/>
     <title><%= LocaleUtil.localize(locale, "TITLE_900") %>
     </title>

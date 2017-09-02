@@ -74,7 +74,7 @@ questionnaireApp
         };
     }])
     .component('questionnaire', {
-        templateUrl: "template/questionnaire.template.html",
+        templateUrl: "/template/questionnaire.template.html",
         bindings: {
             locale: '=',
             questionnaireId: '=',

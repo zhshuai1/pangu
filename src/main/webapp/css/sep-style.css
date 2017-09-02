@@ -15,3 +15,7 @@
 .sep-select {
     display: inline-block;
 }
+
+.navbar-content {
+    max-width: 700px;
+}
