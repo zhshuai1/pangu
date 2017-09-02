@@ -19,3 +19,8 @@
 .navbar-content {
     max-width: 700px;
 }
+
+#questionnaire-form ol {
+    list-style: none;
+    padding: 20px;
+}

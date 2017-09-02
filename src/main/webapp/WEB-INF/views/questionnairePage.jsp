@@ -44,7 +44,7 @@
 <script>
     $(document).ready(function () {
         $("#navbarSupportedContent li").removeClass("active");
-        $("##nav-submit").addClass("active");
+        $("#nav-submit").addClass("active");
     });
 </script>
 </html>
