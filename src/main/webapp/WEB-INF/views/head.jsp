@@ -27,11 +27,13 @@
                 </li>
             </ul>
             <form class="navbar-form navbar-right">
-                <input class="form-control mr-sm-2" type="text"
-                       placeholder="<%=LocaleUtil.localize(locale,"SEARCH_044")%>">
-                <button class="btn btn-outline-success my-2 my-sm-0"
-                        type="submit"><%=LocaleUtil.localize(locale, "SEARCH_044")%>
-                </button>
+                <div class="input-group">
+                    <input class="form-control" type="text"
+                           placeholder="<%=LocaleUtil.localize(locale,"SEARCH_044")%>">
+                    <span class="input-group-addon btn btn-default">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </span>
+                </div>
             </form>
         </div>
     </div>
