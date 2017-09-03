@@ -26,7 +26,7 @@
                     </a>
                 </li>
             </ul>
-            <form class="navbar-form navbar-left">
+            <form class="navbar-form navbar-right">
                 <input class="form-control mr-sm-2" type="text"
                        placeholder="<%=LocaleUtil.localize(locale,"SEARCH_044")%>">
                 <button class="btn btn-outline-success my-2 my-sm-0"
