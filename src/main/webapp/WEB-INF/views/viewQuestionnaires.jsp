@@ -35,8 +35,8 @@
 <%@ include file="head.jsp" %>
 <div class="container" ng-app="viewQuestionnairesApp">
     <div class="jumbotron questionnaire-list" ng-controller="viewQuestionnairesController">
-        <h2>当前热门问卷</h2>
-        <ul>
+        <h2>热门问卷</h2>
+        <ul ng-cloak class="ng-cloak">
             <li ng-repeat="questionnaire in questionnaires" class="btn btn-default form-control ">
                 <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>
                 <a href="/questionnairePage/{{questionnaire.id}}">{{questionnaire.titleCn}}</a>

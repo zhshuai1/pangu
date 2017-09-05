@@ -90,6 +90,11 @@ questionnaireApp
             // and controller. We will get an undefined.
             this.$postLink = function () {
                 $http.get('/questionnaires/' + self.questionnaireId).then(function (response) {
+                    if (!response.data) {
+                        // The requested questionnaire does not exist.
+                        self.notFound = true;
+                        return;
+                    }
                     self.questions = response.data.questions;
                     self.questions.forEach(function (question) {
                         if (question.constraint) {
