@@ -23,4 +23,5 @@ public class Choice {
     private String descriptionEn;
     private Date creationDate;
     private long creator;
+    private String comment;
 }
