@@ -150,7 +150,7 @@
   <City ID="148" CityName="德州市" PID="15" ZipCode="253000">德州市</City>
   <City ID="149" CityName="聊城市" PID="15" ZipCode="252000">聊城市</City>
   <City ID="150" CityName="滨州市" PID="15" ZipCode="256600">滨州市</City>
-  <City ID="151" CityName="荷泽市" PID="15" ZipCode="255000">荷泽市</City>
+    <City ID="151" CityName="菏泽市" PID="15" ZipCode="255000">荷泽市</City>
   <City ID="152" CityName="郑州市" PID="16" ZipCode="450000">郑州市</City>
   <City ID="153" CityName="开封市" PID="16" ZipCode="475000">开封市</City>
   <City ID="154" CityName="洛阳市" PID="16" ZipCode="471000">洛阳市</City>
@@ -181,7 +181,7 @@
   <City ID="179" CityName="咸宁市" PID="17" ZipCode="437000">咸宁市</City>
   <City ID="180" CityName="随州市" PID="17" ZipCode="441300">随州市</City>
   <City ID="181" CityName="恩施土家族苗族自治州" PID="17" ZipCode="445000">恩施土家族苗族自治州</City>
-  <City ID="182" CityName="神农架" PID="17" ZipCode="442400">神农架</City>
+    <City ID="182" CityName="省直辖市" PID="17" ZipCode="442400">省直辖市</City>
   <City ID="183" CityName="长沙市" PID="18" ZipCode="410000">长沙市</City>
   <City ID="184" CityName="株洲市" PID="18" ZipCode="412000">株洲市</City>
   <City ID="185" CityName="湘潭市" PID="18" ZipCode="411100">湘潭市</City>
