@@ -31,11 +31,11 @@
                                ng-required="{{question.required}}">
                     </div>
                     <div ng-switch-when="ADDRESS">
-                        <address form-name="question.id" level="4" root="question.choices[0].root" locale="'Cn'"
-                                 ng-model="$ctrl.selectedDistrict"></address>
+                        <multi-select field-name="question.id" root="question.choices[0].root" level="4"
+                                      ng-model="$ctrl.value"></multi-select>
                     </div>
                     <div ng-switch-when="DATE">
-                        <date form-name="question.id" min-year="1950" max-year="2050" default-year="1990"
+                        <date field-name="question.id" min-year="1950" max-year="2017" default-year="1990"
                               ng-model="$ctrl.birthDay"></date>
                     </div>
                     <div ng-switch-when="PHONE">

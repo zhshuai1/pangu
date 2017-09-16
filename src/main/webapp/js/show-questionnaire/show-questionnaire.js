@@ -114,20 +114,6 @@ questionnaireApp
             }
         }],
     })
-    .component("sepSelect", {
-        template: "<select class='btn btn-default'>" +
-        "<input type='hidden' value='{{$ctrl.defaultValue}}' name='{{$ctrl.questionId}}'" +
-        "<option ng-repeat='choice in $ctrl.choices' value='{{choice.id}}'>{{choice[$ctrl.description]}}</option>" +
-        "</select>",
-        bindings: {
-            choices: '=',
-            questionId: '=',
-            defaultValue: '',
-        },
-        controller: [function () {
-
-        }],
-    })
     // This component is not used yet.
     .component("timer", {
         template: "<span id='timer'>Left time: {{$ctrl.current}}</span>",
@@ -145,6 +131,52 @@ questionnaireApp
             }
         }],
     })
+    .component("multiSelect", {
+        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.fieldName}}' value='{{$ctrl.value}}'>" +
+        "   <div class='btn-group btn-group-vertical'>" +
+        "       <select ng-repeat='data in $ctrl.data' class='btn btn-default' ng-model='data.selected' ng-change='$ctrl.update({{$index}})'>" +
+        "           <option ng-repeat='candidate in data.candidates' value='{{candidate.id}}'>{{candidate.descriptionCn}}</option>" +
+        "       </select>" +
+        "   </div>" +
+        "</div>",
+        bindings: {
+            root: '<',
+            level: '<',
+            locale: '<',
+            fieldName: '<',
+        },
+        controller: ['$http', function ($http) {
+            var self = this;
+            self.data = [];
+            self.update = function (i) {
+                if (self.level - 1 == i) {
+                    self.value = self.data[i].selected;
+                } else {
+                    $http.get('/choices/' + self.data[i].selected).then(function (response) {
+                        self.data[i + 1].candidates = response.data;
+                    });
+                    self.value = null;
+                    self.data[i + 1].selected = "";
+                    for (var k = i + 2; k < self.level; ++k) {
+                        self.data[k].selected = "";
+                        self.data[k].candidates = [];
+                    }
+
+                }
+            }
+            this.$postLink = function () {
+                for (var i = 0; i < self.level; ++i) {
+                    self.data.push({candidates: [], selected: ""});
+                }
+                $http.get('/choices/' + self.root).then(function (response) {
+                    self.data[0].candidates = response.data;
+                    self.data[0].selected = "";
+                });
+            }
+
+        }],
+    })
+    //TODO: Since I have implementated a multi-select component, will deprecate this component.
     // I will implement address and date as components first, because they are complex enough. To keep consistency,
     // maybe I should implement all basic elements as components, such as radio, checkbox and so on.
     .component("address", {
@@ -195,7 +227,7 @@ questionnaireApp
         }],
     })
     .component("date", {
-        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.formName}}' value='{{$ctrl.date}}'>" +
+        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.fieldName}}' value='{{$ctrl.date}}'>" +
         "<div class='btn-group'><select class='btn btn-default' ng-model='$ctrl.selectedYear' ng-change='$ctrl.update()'><option ng-repeat='year in $ctrl.years' value='{{year}}'>{{year}}</option></select>" +
         "<select class='btn btn-default' ng-model='$ctrl.selectedMonth' ng-change='$ctrl.update()'><option ng-repeat='month in $ctrl.months' value='{{month}}'>{{month}}</option></select>" +
         "<select class='btn btn-default' ng-model='$ctrl.selectedDay' ng-change='$ctrl.update()'><option ng-repeat='day in $ctrl.days' value='{{day}}'>{{day}}</option></select></div></div>",
@@ -203,7 +235,7 @@ questionnaireApp
             minYear: '<',
             maxYear: '<',
             defaultYear: '<',
-            formName: '<',
+            fieldName: '<',
         },
         controller: [function () {
             var self = this;
