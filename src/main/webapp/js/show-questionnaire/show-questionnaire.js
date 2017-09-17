@@ -11,7 +11,7 @@ questionnaireApp
                 return;
             }
             // This logic is due to bootstrap-validator does not support the validation for <select>
-            var $selects = $(".sep-select").toArray();
+            var $selects = $(".sep-select[required]").toArray();
             var valid = true;
             for (var i in $selects) {
                 var val = $($selects[i]).find("input[type=hidden]").val();
@@ -106,6 +106,8 @@ questionnaireApp
                             } else {
                                 question.pattern = "^[^<>]*$";
                             }
+                        } else {
+                            question.constraint = {};
                         }
 
                     });
@@ -133,7 +135,7 @@ questionnaireApp
         }],
     })
     .component("multiSelect", {
-        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.fieldName}}' value='{{$ctrl.value}}'>" +
+        template: "<div class='sep-select' ng-required='{{$ctrl.valueRequired}}'><input type='hidden' name='{{$ctrl.fieldName}}' value='{{$ctrl.value}}'>" +
         "   <div class='btn-group btn-group-vertical'>" +
         "       <select ng-repeat='data in $ctrl.data' class='btn btn-default' ng-model='data.selected' ng-change='$ctrl.update({{$index}})'>" +
         "           <option ng-repeat='candidate in data.candidates' value='{{candidate.id}}'>{{candidate.descriptionCn}}</option>" +
@@ -145,6 +147,7 @@ questionnaireApp
             level: '<',
             locale: '<',
             fieldName: '<',
+            valueRequired: '<',
         },
         controller: ['$http', function ($http) {
             var self = this;
