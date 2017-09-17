@@ -23,6 +23,7 @@ public class Questionnaire {
     //Default fetchType is lazy for this. If you want it work properly, you should put @Transactional to the usage
     // method; Or set the fetchType to eager.
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionnaireId")
+    @OrderBy(value = "indexInQuestionnaire")
     private List<Question> questions;
     private long creator;
     private Date creationDate;

@@ -23,6 +23,7 @@ public class Question {
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "questionId")
     private List<Choice> choices;
     private long questionnaireId;
+    private int indexInQuestionnaire;
     private Date creationDate;
     private long creator;
 
