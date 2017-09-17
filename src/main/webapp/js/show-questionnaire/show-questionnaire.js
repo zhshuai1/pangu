@@ -99,6 +99,7 @@ questionnaireApp
                     self.questions.forEach(function (question) {
                         if (question.constraint) {
                             var constraint = JSON.parse(question.constraint);
+                            question.constraint = constraint;
                             question.required = constraint.required;
                             if (constraint.pattern) {
                                 question.pattern = constraint.pattern;

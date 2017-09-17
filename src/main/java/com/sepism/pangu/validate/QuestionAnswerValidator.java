@@ -31,7 +31,6 @@ public class QuestionAnswerValidator {
         DataConstraint dataConstraint;
         switch (question.getType()) {
             case TEXT:
-            case STRING:
             case PHONE:
             case EMAIL:
                 dataConstraint = GSON.fromJson(constraint, StringConstraint.class);
@@ -46,8 +45,9 @@ public class QuestionAnswerValidator {
                 dataConstraint = GSON.fromJson(constraint, DateConstraint.class);
                 break;
             case RADIO:
-            case SELECT:
             case CHECKBOX:
+            case SELECT:
+            case MULTISELECT:
                 dataConstraint = GSON.fromJson(constraint, ChoicesConstraint.class);
                 break;
 
