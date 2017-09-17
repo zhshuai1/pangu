@@ -32,7 +32,8 @@ File.open("colleges","r") do |file|
         college["code"] = code
         college["comment"] = "College:" + code
         college["desc"] = name
-        college["id"] = counter += 1
+        college["id"] = counter += 1 
+        puts city + "!!!!!!!!!!!!!!!!\n" + line if not id_obj_map[city]
         college["parent"] = id_obj_map[city] || 0
         colleges << college
     end
