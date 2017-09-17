@@ -3,7 +3,7 @@
           ng-controller="questionnaireController" ng-submit="onSubmit()">
         <ol>
             <li class="question" ng-repeat="question in $ctrl.questions" on-finish-render-filters>
-                <h4>{{$index+1+". "+question[$ctrl.title]}}</h4>
+                <h4><span ng-if="question.required">*</span>{{$index+1+". "+question[$ctrl.title]}}</h4>
                 <div ng-switch="question.type" class="form-group">
                     <div ng-switch-when="TEXT">
                         <input type="text" name="{{question.id}}" class="form-control"
