@@ -40,7 +40,12 @@ public class CompleteInformationHandler extends SepHandler {
     @Override
     protected Response process(String data) throws InvalidInputException, InternalException {
         Map<String, String> infoMap = GSON.fromJson(data, Map.class);
-        long userId = Long.valueOf(infoMap.get(USERNAME));
+        long userId = 0;
+        try {
+            userId = Long.parseLong(infoMap.get(USERNAME));
+        } catch (Exception e) {
+            throw new InvalidInputException("Failed to parse userId to long", e);
+        }
         String token = infoMap.get(TOKEN);
         infoMap.remove(USERNAME);
         infoMap.remove(TOKEN);

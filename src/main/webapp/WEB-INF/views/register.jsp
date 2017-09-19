@@ -180,7 +180,7 @@
             <%-- In controller, when angular retrieve values from attributes, it will eval the value, so here we should
             use "'Cn'". After eval, the string will get a string and not a variable name.
             Besides, here we use JSP comment to avoid this shown to the user.--%>
-            <questionnaire locale="'Cn'" questionnaire-id="2" url="/complete-info"></questionnaire>
+            <questionnaire locale="'Cn'" questionnaire-id="2" target-url="'/complete-info'"></questionnaire>
             <input type="hidden" name="username" id="complete-info-username" form="questionnaire-form">
             <input type="hidden" name="token" id="authentication-token" form="questionnaire-form">
         </li>
@@ -201,20 +201,7 @@
 <script src="/js/angular-1.6.4.js"></script>
 <script src="/js/show-questionnaire/show-questionnaire.js"></script>
 <script>
-    function getFormData(selector) {
-        var data = {};
-        $(selector).serializeArray().map(function (x) {
-            if (data[x.name] !== undefined) {
-                if (!data[x.name].push) {
-                    data[x.name] = [data[x.name]];
-                }
-                data[x.name].push(x.value || '');
-            } else {
-                data[x.name] = x.value || '';
-            }
-        });
-        return data;
-    }
+
     function completeCallback() {
         $(".steps .step").hide();
         $("#congratulations").show();

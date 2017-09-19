@@ -33,7 +33,7 @@ public class RegisterPageController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String register(@RequestBody String formData) {
-        log.info("User is registering with information: " + formData);
+        log.info("User is registering with information: [{}] ", formData);
         return registerHandler.handle(formData).serialize();
     }
 
@@ -42,7 +42,7 @@ public class RegisterPageController {
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String completeInfo(@RequestBody String formData) {
-        log.info("User is completing registration with information: " + formData);
+        log.info("User is completing registration with information: [{}]", formData);
         return completeInformationHandler.handle(formData).serialize();
     }
 

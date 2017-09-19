@@ -32,7 +32,7 @@
 <%@include file="head.jsp" %>
 <div class="questionnaire" ng-app="questionnaireApp">
     <questionnaire locale="'Cn'" questionnaire-id="<%=request.getAttribute("id")%>"
-                   url="/complete-info"></questionnaire>
+                   target-url="'/submit-quesitonnaire'"></questionnaire>
 </div>
 <%@include file="foot.jsp" %>
 </body>

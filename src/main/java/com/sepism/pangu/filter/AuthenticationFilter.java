@@ -40,7 +40,7 @@ public class AuthenticationFilter implements Filter {
             //For a simple version here, I only use mysql as the distributed storage. For a long term solution, I
             // should use No-Sql storage such as mongoDB instead. Besides, cache is useful in this case.
 
-            Session session = sessionRepository.findOne(Long.valueOf(userId));
+            Session session = sessionRepository.findOne(Long.parseLong(userId));
             if (session.getToken().equals(token) && DateUtil.diff(new Date(), session.getLastAccessTime()) <
                     GlobalConstant.SESSION_EXPIRED_TIME) {
                 log.info("The user [{}] has been logged into the system with token [{}]", userId, token);
