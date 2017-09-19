@@ -69,7 +69,7 @@
 </head>
 <body>
 <div class="container main">
-    <form class="form-signin" action="/login" method="POST">
+    <form class="form-signin" method="POST">
         <h2 class="form-signin-heading"><%= LocaleUtil.localize(locale, "PLEASE_SIGN_IN_001") %>
         </h2>
         <label for="userName" class="sr-only"><%= LocaleUtil.localize(locale, "ACCOUNT_NAME_004") %>

@@ -41,8 +41,9 @@ public class AuthenticationFilter implements Filter {
             // should use No-Sql storage such as mongoDB instead. Besides, cache is useful in this case.
 
             Session session = sessionRepository.findOne(Long.parseLong(userId));
-            if (session.getToken().equals(token) && DateUtil.diff(new Date(), session.getLastAccessTime()) <
-                    GlobalConstant.SESSION_EXPIRED_TIME) {
+            if (session != null
+                    && session.getToken().equals(token)
+                    && DateUtil.diff(new Date(), session.getLastAccessTime()) < GlobalConstant.SESSION_EXPIRED_TIME) {
                 log.info("The user [{}] has been logged into the system with token [{}]", userId, token);
                 servletRequest.setAttribute(RequestAttribute.LOGGED_IN, true);
                 session.setLastAccessTime(new Date());
