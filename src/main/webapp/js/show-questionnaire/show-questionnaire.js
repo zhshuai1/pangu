@@ -1,65 +1,24 @@
+function getFormData(selector) {
+    var data = {};
+    $(selector).serializeArray().map(function (x) {
+        if (data[x.name] !== undefined) {
+            if (!data[x.name].push) {
+                data[x.name] = [data[x.name]];
+            }
+            data[x.name].push(x.value || '');
+        } else {
+            data[x.name] = x.value || '';
+        }
+    });
+    return data;
+}
+
 var questionnaireApp = angular.module('questionnaireApp', []);
 questionnaireApp
     .controller('questionnaireController', ['$scope', function ($scope) {
         $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
             $("form").validator("destroy").validator();
         });
-        $scope.onSubmit = function () {
-
-            $(".sep-form").validator('validate');
-            if ($(this).hasClass("disabled")) {
-                return;
-            }
-            // This logic is due to bootstrap-validator does not support the validation for <select>
-            var $selects = $(".sep-select[required]").toArray();
-            var valid = true;
-            for (var i in $selects) {
-                var val = $($selects[i]).find("input[type=hidden]").val();
-                if (!val) {
-                    $($selects[i]).addClass("errored-form-control");
-                    valid = false;
-                } else {
-                    $($selects[i]).removeClass("errored-form-control");
-                }
-            }
-            if (!valid) return;
-            //currently the submit gather all form data with this function, will refactor will ng-model.
-            var data = getFormData("#complete-info form");
-            console.log(data);
-            $.ajax({
-                url: "/complete-info",
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json;charset=UTF-8",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    var errorCode = response.errorCode;
-
-                    if (errorCode == "SUCCESS") {
-                        // After the complete Action finished, will call a callback defined outside;
-                        // This is not a good practice, just workaround to couple the angular and non-angular;
-                        if (completeCallback) {
-                            completeCallback();
-                        }
-                    } else if (errorCode == "USER_EXIST") {
-                        alert("The username has been registered.");
-                    } else if (errorCode == "INVALID_INPUT") {
-                        alert("The data you fill in is invalid.");
-                    } else {
-                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
-                    }
-
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(XMLHttpRequest.status);
-                    console.log(XMLHttpRequest.readyState);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                    alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
-                }
-            });
-            return false;
-        }
     }])
     .directive('onFinishRenderFilters', ['$timeout', function ($timeout) {
         return {
@@ -78,6 +37,7 @@ questionnaireApp
         bindings: {
             locale: '=',
             questionnaireId: '=',
+            targetUrl: '=',
         },
         controller: ['$http', function ($http) {
             var self = this;
@@ -114,6 +74,63 @@ questionnaireApp
                     self.title = 'title' + self.locale;
                     self.description = 'description' + self.locale;
                 });
+            }
+            this.onSubmit = function () {
+
+                $(".sep-form").validator('validate');
+
+                // This logic is due to bootstrap-validator does not support the validation for <select>
+                var $selects = $(".sep-select[required]").toArray();
+                console.log($selects);
+                var valid = true;
+                for (var i in $selects) {
+                    var val = $($selects[i]).find("input[type=hidden]").val();
+                    if (!val) {
+                        $($selects[i]).addClass("errored-form-control");
+                        valid = false;
+                    } else {
+                        $($selects[i]).removeClass("errored-form-control");
+                    }
+                }
+                if (!valid || $("#btn-submit-questionnaire").hasClass("disabled")) {
+                    return;
+                }
+                //currently the submit gather all form data with this function, will refactor will ng-model.
+                var data = getFormData("#questionnaire-form");
+                console.log(data);
+                $.ajax({
+                    url: self.targetUrl,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        var errorCode = response.errorCode;
+
+                        if (errorCode == "SUCCESS") {
+                            // After the complete Action finished, will call a callback defined outside;
+                            // This is not a good practice, just workaround to couple the angular and non-angular;
+                            if (completeCallback) {
+                                completeCallback();
+                            }
+                        } else if (errorCode == "USER_EXIST") {
+                            alert("The username has been registered.");
+                        } else if (errorCode == "INVALID_INPUT") {
+                            alert("The data you fill in is invalid.");
+                        } else {
+                            alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                        }
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(XMLHttpRequest.status);
+                        console.log(XMLHttpRequest.readyState);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
+                    }
+                });
+                return false;
             }
         }],
     })

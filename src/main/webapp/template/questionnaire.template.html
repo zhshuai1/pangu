@@ -1,6 +1,6 @@
 <div ng-if="$ctrl.questions">
     <form id='questionnaire-form' method="post" role="form" data-toggle="validator" class="sep-form"
-          ng-controller="questionnaireController" ng-submit="onSubmit()">
+          ng-controller="questionnaireController" ng-submit="$ctrl.onSubmit()">
         <ol>
             <li class="question" ng-repeat="question in $ctrl.questions" on-finish-render-filters>
                 <h4><span ng-if="question.required">*</span>{{$index+1+". "+question[$ctrl.title]}}</h4>
@@ -64,7 +64,7 @@
         </ol>
         <div class="btn-group btn-group-justified btn-submit">
             <div class="btn-group">
-                <button id="btn-complete" type="submit" class="btn btn-success">完成</button>
+                <button id="btn-submit-questionnaire" type="submit" class="btn btn-success">完成</button>
             </div>
         </div>
     </form>
