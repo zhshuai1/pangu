@@ -3,7 +3,7 @@ package com.sepism.pangu.model.constraint;
 import com.sepism.pangu.exception.InvalidInputException;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Pattern;
 

@@ -4,7 +4,7 @@ import com.sepism.pangu.exception.InvalidInputException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 @Setter

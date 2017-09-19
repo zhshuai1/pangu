@@ -8,7 +8,7 @@ import com.sepism.pangu.model.authentication.Session;
 import com.sepism.pangu.model.repository.SessionRepository;
 import com.sepism.pangu.util.DateUtil;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 

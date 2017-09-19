@@ -5,7 +5,7 @@ import com.sepism.pangu.constant.UsernameType;
 import com.sepism.pangu.exception.InvalidInputException;
 import com.sepism.pangu.model.handler.RegisterRequest;
 import com.sepism.pangu.util.DataNormalizer;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

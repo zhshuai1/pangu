@@ -1,7 +1,7 @@
 package com.sepism.pangu.util;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
