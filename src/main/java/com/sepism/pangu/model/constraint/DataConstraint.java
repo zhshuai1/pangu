@@ -18,7 +18,7 @@ public class DataConstraint {
 
     public void validate(String value) throws InvalidInputException {
         if (required && StringUtils.isBlank(value)) {
-            throw new InvalidInputException("The field is required, but is empty.");
+            throw new InvalidInputException("Answer for this question is required, but is empty.");
         }
         if (!required && StringUtils.isBlank(value)) {
             return;

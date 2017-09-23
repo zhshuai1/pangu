@@ -26,13 +26,20 @@
         .navbar {
             margin-bottom: 20px;
         }
+
+        .thankyou {
+            max-width: 500px;
+            margin: 50px auto;
+        }
     </style>
 </head>
 <body>
 <%@include file="head.jsp" %>
-<div class="questionnaire" ng-app="questionnaireApp">
-    <questionnaire locale="'Cn'" questionnaire-id="<%=request.getAttribute("id")%>"
-                   target-url="'/submit-quesitonnaire'"></questionnaire>
+<div id="main">
+    <div class="questionnaire" ng-app="questionnaireApp">
+        <questionnaire locale="'Cn'" questionnaire-id="<%=request.getAttribute("id")%>"
+                       target-url="'/submit-questionnaire'"></questionnaire>
+    </div>
 </div>
 <%@include file="foot.jsp" %>
 </body>
@@ -46,5 +53,19 @@
         $("#navbarSupportedContent li").removeClass("active");
         $("#nav-submit").addClass("active");
     });
+    function completeCallback() {
+        $("#main").html($("#thankyou-page").html());
+    }
 </script>
+<template id="thankyou-page">
+    <div class="thankyou">
+        <h3>感谢您的作答</h3>
+        <div>
+            <a href="/reports/<%=request.getAttribute("id")%>">查看问卷结果</a>
+        </div>
+        <div>
+            <a href="/viewQuestionnaires">再回答一份问卷</a>
+        </div>
+    </div>
+</template>
 </html>

@@ -1,14 +1,19 @@
 function getFormData(selector) {
     var data = {};
+    var arrayTypeData = [];
     $(selector).serializeArray().map(function (x) {
         if (data[x.name] !== undefined) {
             if (!data[x.name].push) {
                 data[x.name] = [data[x.name]];
+                arrayTypeData.push(x.name)
             }
             data[x.name].push(x.value || '');
         } else {
             data[x.name] = x.value || '';
         }
+    });
+    arrayTypeData.forEach(function (x) {
+        data[x] = JSON.stringify(data[x]);
     });
     return data;
 }
@@ -106,17 +111,20 @@ questionnaireApp
                     data: JSON.stringify(data),
                     success: function (response) {
                         var errorCode = response.errorCode;
-
+                        var extraData = response.extraData;
                         if (errorCode == "SUCCESS") {
                             // After the complete Action finished, will call a callback defined outside;
                             // This is not a good practice, just workaround to couple the angular and non-angular;
                             if (completeCallback) {
-                                completeCallback();
+                                completeCallback(extraData);
                             }
                         } else if (errorCode == "USER_EXIST") {
                             alert("The username has been registered.");
                         } else if (errorCode == "INVALID_INPUT") {
                             alert("The data you fill in is invalid.");
+                        } else if (errorCode == "NOT_LOGGIN") {
+                            var redirectUrl = extraData.redirectUrl;
+                            location.replace("/login?redirectUrl=" + encodeURIComponent(redirectUrl));
                         } else {
                             alert("Unknown issue occurs, please contact us: zh_ang_ok@yeah.net");
                         }

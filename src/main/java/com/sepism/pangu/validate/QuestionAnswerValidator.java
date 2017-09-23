@@ -19,10 +19,12 @@ public class QuestionAnswerValidator {
     private QuestionRepository questionRepository;
 
     public void validate(long questionId, String answer) throws InvalidInputException {
-        log.info("validating the question answer {} for questionId {}", answer, questionId);
+        log.info("Validating the question answer {} for questionId {}", answer, questionId);
         Question question = questionRepository.findOne(questionId);
         if (question == null) {
-            log.error("did not find the questionId {} for the answer.", questionId);
+            String errorMessage = String.format("Did not find the questionId [%d] for the answer.", questionId);
+            log.error(errorMessage);
+            throw new InvalidInputException(errorMessage);
         }
         String constraint = question.getConstraint();
         if (StringUtils.isBlank(constraint)) {
