@@ -33,13 +33,13 @@ public class QuestionnaireController {
     @RequestMapping(path = "/questionnaires/", method = RequestMethod.GET, produces = MediaType
             .APPLICATION_JSON_UTF8_VALUE)
     @Transactional
-    public String getQuestionnaires(@RequestParam(required = false) Integer start,
-                                    @RequestParam(required = false) Integer page) {
-        log.info("Getting questionnaires by start {} and page {}", start, page);
-        start = null == start ? 0 : start;
-        page = null == page ? 20 : page;
+    public String getQuestionnaires(@RequestParam(required = false) Integer page,
+                                    @RequestParam(required = false) Integer size) {
+        log.info("Getting questionnaires by start {} and page {}", page, size);
+        page = null == page ? 0 : page;
+        size = null == size ? 20 : size;
         List<Questionnaire> questionnaires = questionnaireRepository.findAllByHotGreaterThanEqualOrderByHot(0,
-                new PageRequest(start, page)).getContent();
+                new PageRequest(page, size)).getContent();
         return new Gson().toJson(questionnaires);
     }
 }
