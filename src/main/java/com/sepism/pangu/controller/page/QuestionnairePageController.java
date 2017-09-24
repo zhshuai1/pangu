@@ -2,9 +2,7 @@ package com.sepism.pangu.controller.page;
 
 
 import com.google.gson.Gson;
-import com.sepism.pangu.constant.CookieName;
-import com.sepism.pangu.constant.ErrorCode;
-import com.sepism.pangu.constant.ExtraDataName;
+import com.sepism.pangu.constant.*;
 import com.sepism.pangu.constant.RequestAttribute;
 import com.sepism.pangu.model.answer.QuestionAnswer;
 import com.sepism.pangu.model.answer.QuestionnaireAnswer;
@@ -12,11 +10,12 @@ import com.sepism.pangu.model.handler.Response;
 import com.sepism.pangu.model.questionnaire.Question;
 import com.sepism.pangu.model.questionnaire.Questionnaire;
 import com.sepism.pangu.model.repository.QuestionAnswerRepository;
-import com.sepism.pangu.model.repository.QuestionRepository;
 import com.sepism.pangu.model.repository.QuestionnaireAnswerRepository;
 import com.sepism.pangu.model.repository.QuestionnaireRepository;
+import com.sepism.pangu.util.DateUtil;
 import com.sepism.pangu.validate.QuestionAnswerValidator;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -35,8 +34,6 @@ public class QuestionnairePageController {
     private static final String QUESTIONNAIRE_ID = "questionnaireId";
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
     @Autowired
     private QuestionAnswerValidator questionAnswerValidator;
     @Autowired
@@ -97,33 +94,100 @@ public class QuestionnairePageController {
                 }
             }
 
-            QuestionnaireAnswer questionnaireAnswer = QuestionnaireAnswer.builder().questionnaireId(questionnaireId)
-                    .creationDate(new Date()).userId(userId).build();
-            questionnaireAnswerRepository.save(questionnaireAnswer);
-            long questionnaireAnswerId = questionnaireAnswer.getId();
-            log.info("Persist the questionnaire answer {} successfully.", questionnaireAnswer);
+            List<QuestionnaireAnswer> existedQuestionnaireAnswers = questionnaireAnswerRepository
+                    .findByQuestionnaireIdAndUserIdAndCurrent(questionnaireId, userId, true);
+            // If the user did not answer the questionnaire before or answer the questionnaire
+            // DEFAULT_UPDATE_INTERVAL ago, will create new records
+            if (existedQuestionnaireAnswers.size() > 1) {
+                log.warn("There should be only one answer is marked as current, but there are more than one: {}",
+                        existedQuestionnaireAnswers);
+            }
 
-            // Here will use a second loop to check the validness and save the answer
-            List<Long> failedQuestions = new ArrayList<>(answer.size());
-            for (Map.Entry<String, String> entry : answer.entrySet()) {
-                long key = Long.parseLong(entry.getKey());
-                try {
-                    questionAnswerValidator.validate(key, entry.getValue());
-                    QuestionAnswer questionAnswer = QuestionAnswer.builder()
-                            .answer(entry.getValue())
-                            .questionId(key)
-                            .questionnaireAnswerId(questionnaireAnswerId)
-                            .creationDate(new Date())
-                            .questionnaireId(questionnaireId)
-                            .userId(userId).build();
-                    questionAnswerRepository.save(questionAnswer);
-                } catch (Exception e) {
-                    log.info("Failed to validate and persist the question answer {}", entry, e);
-                    failedQuestions.add(key);
+            if ((existedQuestionnaireAnswers.size() == 0) || (DateUtil.diff(new Date(), existedQuestionnaireAnswers.get(0)
+                    .getCreationDate()) > GlobalConstant.DEFAULT_UPDATE_INTERVAL)) {
+                log.info("The user did not answer the questionnaire in one week, will create new records.");
+                if (existedQuestionnaireAnswers.size() > 0) {
+                    QuestionnaireAnswer currentQuestionnaireAnswer = existedQuestionnaireAnswers.get(0);
+                    currentQuestionnaireAnswer.setCurrent(false);
+                    questionnaireAnswerRepository.save(currentQuestionnaireAnswer);
                 }
+
+                QuestionnaireAnswer questionnaireAnswer = QuestionnaireAnswer.builder().questionnaireId(questionnaireId)
+                        .creationDate(new Date()).userId(userId).current(true).build();
+                questionnaireAnswerRepository.save(questionnaireAnswer);
+                long questionnaireAnswerId = questionnaireAnswer.getId();
+                log.info("Persist the questionnaire answer {} successfully.", questionnaireAnswer);
+
+                // Here will use a second loop to check the validness and save the answer
+                List<Long> failedQuestions = new ArrayList<>(answer.size());
+                for (Map.Entry<String, String> entry : answer.entrySet()) {
+                    long key = Long.parseLong(entry.getKey());
+                    try {
+                        questionAnswerValidator.validate(key, entry.getValue());
+                        QuestionAnswer questionAnswer = QuestionAnswer.builder()
+                                .answer(entry.getValue())
+                                .questionId(key)
+                                .questionnaireAnswerId(questionnaireAnswerId)
+                                .creationDate(new Date())
+                                .questionnaireId(questionnaireId)
+                                .userId(userId).build();
+                        questionAnswerRepository.save(questionAnswer);
+                        log.info("Persist question [{}] successfully.", key);
+                    } catch (Exception e) {
+                        log.info("Failed to validate and persist the question answer {}", entry, e);
+                        failedQuestions.add(key);
+                    }
+                }
+
+            } else {
+                log.info("The user answered the questionnaire in a week, will only update the answer.");
+
+                QuestionnaireAnswer questionnaireAnswer = existedQuestionnaireAnswers.get(0);
+                long questionnaireAnswerId = questionnaireAnswer.getId();
+
+                // Here will use a second loop to check the validness and save the answer
+                List<Long> failedQuestions = new ArrayList<>(answer.size());
+                for (Map.Entry<String, String> entry : answer.entrySet()) {
+                    long key = Long.parseLong(entry.getKey());
+                    try {
+                        questionAnswerValidator.validate(key, entry.getValue());
+                        List<QuestionAnswer> questionAnswers = questionAnswerRepository
+                                .findByQuestionnaireAnswerIdAndQuestionId(questionnaireAnswerId, key);
+                        QuestionAnswer questionAnswer;
+                        if (questionAnswers.size() == 0) {
+                            log.error("The query result should be 1, but is empty.");
+                            questionAnswer = QuestionAnswer.builder()
+                                    .answer(entry.getValue())
+                                    .questionId(key)
+                                    .questionnaireAnswerId(questionnaireAnswerId)
+                                    .creationDate(new Date())
+                                    .questionnaireId(questionnaireId)
+                                    .userId(userId).build();
+                        } else {
+                            if (questionAnswers.size() > 1) {
+                                log.warn("This should be unique, but not. The query result is: {}", questionAnswers);
+                            }
+                            questionAnswer = questionAnswers.get(0);
+                            if (StringUtils.equals(questionAnswer.getAnswer(), entry.getValue())) {
+                                log.info("The answer is same as before, will ignore updating the question {}", questionAnswer);
+                                continue;
+                            }
+                            questionAnswer.setAnswer(entry.getValue());
+                        }
+                        questionAnswerRepository.save(questionAnswer);
+                        log.info("Persist question [{}] successfully.", key);
+
+                    } catch (Exception e) {
+                        log.info("Failed to validate and persist the question answer {}", entry, e);
+                        failedQuestions.add(key);
+                    }
+                }
+
             }
         } catch (Exception e) {
             log.error("Exception encountered when submit the questionnaire answers.", e);
+            return Response.builder().errorCode(ErrorCode.INTERNAL_ERROR).errorMessage("Unknown issues occured.")
+                    .build().serialize();
         }
         return Response.builder().errorCode(ErrorCode.SUCCESS).errorMessage("Success").build().serialize();
     }

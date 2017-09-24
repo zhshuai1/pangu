@@ -1,9 +1,6 @@
 package com.sepism.pangu.model.answer;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +8,8 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "questionnaireAnswers")
@@ -20,5 +19,6 @@ public class QuestionnaireAnswer {
     private long id;
     private long userId;
     private long questionnaireId;
+    private boolean current;
     private Date creationDate;
 }
