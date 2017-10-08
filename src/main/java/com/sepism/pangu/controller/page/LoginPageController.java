@@ -3,7 +3,7 @@ package com.sepism.pangu.controller.page;
 import com.sepism.pangu.constant.CookieName;
 import com.sepism.pangu.constant.GlobalConstant;
 import com.sepism.pangu.model.authentication.Session;
-import com.sepism.pangu.model.repository.SessionRepository;
+import com.sepism.pangu.model.repository.SessionRepositoryRedis;
 import com.sepism.pangu.model.repository.UserRepository;
 import com.sepism.pangu.model.user.User;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +29,7 @@ public class LoginPageController {
     private UserRepository userRepository;
 
     @Autowired
-    private SessionRepository sessionRepository;
+    private SessionRepositoryRedis sessionRepository;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginPage() {

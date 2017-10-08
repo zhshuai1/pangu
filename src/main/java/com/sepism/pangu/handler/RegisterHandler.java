@@ -12,7 +12,7 @@ import com.sepism.pangu.model.authentication.ValidationCode;
 import com.sepism.pangu.model.handler.RegisterRequest;
 import com.sepism.pangu.model.handler.RegisterResponse;
 import com.sepism.pangu.model.handler.Response;
-import com.sepism.pangu.model.repository.SessionRepository;
+import com.sepism.pangu.model.repository.SessionRepositoryRedis;
 import com.sepism.pangu.model.repository.UserRepository;
 import com.sepism.pangu.model.repository.ValidationCodeRepository;
 import com.sepism.pangu.model.user.User;
@@ -41,7 +41,7 @@ public class RegisterHandler extends SepHandler {
     private ValidationCodeRepository validationCodeRepository;
 
     @Autowired
-    private SessionRepository sessionRepository;
+    private SessionRepositoryRedis sessionRepository;
 
     @Override
     protected Response process(String data) throws InvalidInputException, InternalException {

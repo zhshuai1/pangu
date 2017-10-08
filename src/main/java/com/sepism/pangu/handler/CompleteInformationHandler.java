@@ -8,7 +8,7 @@ import com.sepism.pangu.exception.InvalidInputException;
 import com.sepism.pangu.model.authentication.Session;
 import com.sepism.pangu.model.handler.CompletionResponse;
 import com.sepism.pangu.model.handler.Response;
-import com.sepism.pangu.model.repository.SessionRepository;
+import com.sepism.pangu.model.repository.SessionRepositoryRedis;
 import com.sepism.pangu.model.repository.UserRepository;
 import com.sepism.pangu.model.user.User;
 import com.sepism.pangu.validate.QuestionAnswerValidator;
@@ -35,7 +35,7 @@ public class CompleteInformationHandler extends SepHandler {
     private UserRepository userRepository;
 
     @Autowired
-    private SessionRepository sessionRepository;
+    private SessionRepositoryRedis sessionRepository;
 
     @Override
     protected Response process(String data) throws InvalidInputException, InternalException {
