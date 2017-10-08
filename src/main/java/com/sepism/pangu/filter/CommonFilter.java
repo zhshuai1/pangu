@@ -26,6 +26,8 @@ public class CommonFilter implements Filter {
         ThreadContext.push(UUID.randomUUID().toString());
         log.info("One request to visit sepism.com! RemoteHost: {}, RemoteAddress: {}, RemotePort: {}",
                 servletRequest.getRemoteHost(), servletRequest.getRemoteAddr(), servletRequest.getRemotePort());
+        String ip = ((HttpServletRequest) servletRequest).getHeader("x-remote-ip");
+        ThreadContext.push(ip);
         parseCookiesToAttributes(servletRequest);
         filterChain.doFilter(servletRequest, servletResponse);
         ThreadContext.clearAll();
