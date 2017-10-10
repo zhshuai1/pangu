@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 import java.util.List;
 
@@ -27,7 +28,16 @@ public class SessionRepositoryRedis {
             log.error("The session to be saved is null. This is very strange.");
             return;
         }
+        // Here should use watch to avoid other client to change the key during the operation. But considering the
+        // chance is quite low, and there is not much impact, I will ignore the watch.
+        Transaction transaction = jedis.multi();
         jedis.hset(SESSION_PREFIX + session.getId(), TOKEN, session.getToken());
         jedis.pexpire(SESSION_PREFIX + session.getId(), GlobalConstant.SESSION_EXPIRED_TIME);
+        List<Object> result = transaction.exec();
+        if (result == null) {
+            log.error("Failed to exec the transaction when storing session to redis.");
+        } else {
+            log.info("The transaction exec result is: {}", result);
+        }
     }
 }
