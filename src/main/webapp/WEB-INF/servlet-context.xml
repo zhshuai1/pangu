@@ -30,9 +30,5 @@
 	</bean>
 
 	<bean id="authenticationFilter" class="com.sepism.pangu.filter.AuthenticationFilter"/>
-	<bean id="jedis" class="redis.clients.jedis.Jedis">
-		<constructor-arg name="host" value="d.sep.com"/>
-	</bean>
-
 
 </beans>
