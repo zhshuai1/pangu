@@ -34,7 +34,6 @@ public class SessionRepositoryRedis {
         }
         Jedis jedis = new Jedis(REDIS_HOST);
         String key = composeKey(session.getId());
-        jedis.watch(key);
         Transaction transaction = jedis.multi();
         transaction.hset(key, TOKEN, session.getToken());
         transaction.pexpire(key, GlobalConstant.SESSION_EXPIRED_TIME);
