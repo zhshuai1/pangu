@@ -1,5 +1,6 @@
 package com.sepism.pangu.model.answer;
 
+import com.sepism.pangu.model.questionnaire.Question;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,8 +20,14 @@ public class QuestionAnswer {
     private long id;
     private long questionId;
     private long questionnaireId;
-    private long questionnaireAnswerId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "questionnaireAnswerId")
+    private QuestionnaireAnswer questionnaireAnswer;
     private long userId;
+    @Enumerated(EnumType.STRING)
+    private Question.Type type;
     private String answer;
+    private boolean current;
     private Date creationDate;
+    private Date lastUpdateTime;
 }

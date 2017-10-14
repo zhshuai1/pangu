@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +22,7 @@ public class QuestionnaireAnswer {
     private long questionnaireId;
     private boolean current;
     private Date creationDate;
+    private Date lastUpdateTime;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "questionnaireAnswer")
+    private List<QuestionAnswer> questionAnswers;
 }
