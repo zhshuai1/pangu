@@ -18,11 +18,9 @@ public class QuestionAnswerValidator {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public void validate(long questionId, String answer) throws InvalidInputException {
-        log.info("Validating the question answer {} for questionId {}", answer, questionId);
-        Question question = questionRepository.findOne(questionId);
+    public void validate(Question question, String answer) throws InvalidInputException {
         if (question == null) {
-            String errorMessage = String.format("Did not find the questionId [%d] for the answer.", questionId);
+            String errorMessage = String.format("The question should not be null.");
             log.error(errorMessage);
             throw new InvalidInputException(errorMessage);
         }
@@ -58,5 +56,16 @@ public class QuestionAnswerValidator {
                 return;
         }
         dataConstraint.validate(answer);
+    }
+
+    public void validate(long questionId, String answer) throws InvalidInputException {
+        log.info("Validating the question answer {} for questionId {}", answer, questionId);
+        Question question = questionRepository.findOne(questionId);
+        if (question == null) {
+            String errorMessage = String.format("Did not find the questionId [%d] for the answer.", questionId);
+            log.error(errorMessage);
+            throw new InvalidInputException(errorMessage);
+        }
+        validate(question, answer);
     }
 }
