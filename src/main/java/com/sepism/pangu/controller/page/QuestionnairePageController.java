@@ -1,6 +1,8 @@
 package com.sepism.pangu.controller.page;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sepism.pangu.constant.*;
 import com.sepism.pangu.constant.RequestAttribute;
 import com.sepism.pangu.model.answer.QuestionAnswer;
@@ -10,9 +12,12 @@ import com.sepism.pangu.model.questionnaire.Question;
 import com.sepism.pangu.model.questionnaire.Questionnaire;
 import com.sepism.pangu.model.repository.QuestionnaireAnswerRepository;
 import com.sepism.pangu.model.repository.QuestionnaireRepository;
+import com.sepism.pangu.processor.VoteUpdateProcessor;
+import com.sepism.pangu.util.Configuration;
 import com.sepism.pangu.util.DateUtil;
 import com.sepism.pangu.validate.QuestionAnswerValidator;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -23,19 +28,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
 public class QuestionnairePageController {
+    private static final Gson GSON = new Gson();
     private static final String QUESTIONNAIRE_ID = "questionnaireId";
     private static final long DAYS = GlobalConstant.DEFAULT_UPDATE_INTERVAL / 1000 / 3600 / 24;
+    @Autowired
+    private static ExecutorService executorService = Executors.newFixedThreadPool(
+            Integer.parseInt(Configuration.get("numberOfThreads")));
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
     @Autowired
     private QuestionAnswerValidator questionAnswerValidator;
     @Autowired
     private QuestionnaireAnswerRepository questionnaireAnswerRepository;
+    @Autowired
+    private VoteUpdateProcessor voteUpdateProcessor;
 
     @RequestMapping(path = "/questionnairePage/{id}", method = RequestMethod.GET)
     public String getQuestionnairePage(@PathVariable String id, HttpServletRequest request, Model model) {
@@ -96,25 +109,33 @@ public class QuestionnairePageController {
                     .findByQuestionnaireIdAndUserIdAndCurrent(questionnaireId, userId, true);
 
             if (existedQuestionnaireAnswers.size() > 1) {
-                log.warn("There should be only one answer is marked as current, but there are more than one: {}",
+                log.error("There should be only one answer is marked as current, but there are more than one: {}",
                         existedQuestionnaireAnswers);
             }
+
+            // Generally, there will be no more than 20 questions in a questionnaire.
+            final List<QuestionAnswer> formerAnswers = new ArrayList<>(20);
+            List<QuestionAnswer> newAnswers = new ArrayList<>(20);
+            String formerAnswerString;
+            QuestionnaireAnswer questionnaireAnswer;
             // If the user did not answer the questionnaire before or answer the questionnaire
             // DEFAULT_UPDATE_INTERVAL ago, will create new records
             if ((existedQuestionnaireAnswers.size() == 0) || (DateUtil.diff(new Date(), existedQuestionnaireAnswers
                     .get(0).getCreationDate()) > GlobalConstant.DEFAULT_UPDATE_INTERVAL)) {
+                formerAnswerString = null;
                 if (existedQuestionnaireAnswers.size() > 0) {
                     existedQuestionnaireAnswers.stream().forEach(qna -> {
                         qna.setCurrent(false);
                         qna.setLastUpdateTime(new Date());
                         questionnaireAnswerRepository.save(qna);
+                        formerAnswers.addAll(qna.getQuestionAnswers());
                     });
                     log.info("The user answered the questionnaire {} days ago, will create a new answer.", DAYS);
                 } else {
                     log.info("It's first time for user to answer this questionnaire, will create a new answer.");
                 }
 
-                QuestionnaireAnswer questionnaireAnswer = QuestionnaireAnswer.builder().questionnaireId(questionnaireId)
+                questionnaireAnswer = QuestionnaireAnswer.builder().questionnaireId(questionnaireId)
                         .creationDate(new Date()).lastUpdateTime(new Date()).userId(userId).current(true).build();
 
                 List<QuestionAnswer> questionAnswers = new ArrayList<>(questions.size());
@@ -134,17 +155,17 @@ public class QuestionnairePageController {
                 }
                 log.info("The questionAnswers after parse is: {}", questionAnswers);
                 questionnaireAnswer.setQuestionAnswers(questionAnswers);
-                questionnaireAnswerRepository.save(questionnaireAnswer);
-                log.info("The questionnaireAnswer has been created and saved successfully, the id is: {}",
-                        questionnaireAnswer.getId());
             } else {
                 log.info("The user answered the questionnaire in {} days, will only update the answer.", DAYS);
 
-                QuestionnaireAnswer questionnaireAnswer = existedQuestionnaireAnswers.get(0);
+                questionnaireAnswer = existedQuestionnaireAnswers.get(0);
                 questionnaireAnswer.setLastUpdateTime(new Date());
                 Set<Long> newQuestions = new HashSet<>(questionIds);
 
                 List<QuestionAnswer> questionAnswers = questionnaireAnswer.getQuestionAnswers();
+                // use serialization to store the former answers. For List, even the deep copy only copies the
+                // reference.
+                formerAnswerString = GSON.toJson(questionAnswers);
                 for (QuestionAnswer questionAnswer : questionAnswers) {
                     long questionId = questionAnswer.getQuestionId();
                     String answer = answers.get(String.valueOf(questionId));
@@ -170,11 +191,22 @@ public class QuestionnairePageController {
                             .lastUpdateTime(new Date()).build();
                     questionAnswers.add(questionAnswer);
                 }
-                questionnaireAnswerRepository.save(questionnaireAnswer);
-                log.info("The questionnaireAnswer has been updated successfully, the id is: {}",
-                        questionnaireAnswer.getId());
             }
-            log.info("Successfully updated the questionnaireAnswer for questionnaire {}", questionnaireId);
+            questionnaireAnswerRepository.save(questionnaireAnswer);
+            log.info("Successfully updated the questionnaireAnswer for questionnaire {}, the answer id is {}",
+                    questionnaireId, questionnaireAnswer.getId());
+            newAnswers.addAll(questionnaireAnswer.getQuestionAnswers());
+            executorService.submit(() -> {
+                        if (StringUtils.isNotBlank(formerAnswerString)) {
+                            formerAnswers.addAll(GSON.fromJson(formerAnswerString,
+                                    new TypeToken<List<QuestionAnswer>>() {
+                                    }.getType()));
+                        }
+                        voteUpdateProcessor.updateVotesIncremental(formerAnswers, newAnswers, questions);
+                    }
+            );
+            log.info("Submit the task to executor service to update the votes asynchronously.");
+
         } catch (Exception e) {
             log.error("Exception encountered when submit the questionnaire answers.", e);
             return Response.builder().errorCode(ErrorCode.INTERNAL_ERROR).errorMessage("Unknown issues occurred.")
