@@ -6,6 +6,7 @@ import com.sepism.pangu.util.Configuration;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisNoScriptException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,19 +17,13 @@ import java.util.List;
 public class QuestionnaireReportRepositoryRedis {
 
     private static final String LUA_SCRIPT = "" +
-            "   local result = {}                             " +
+            "   local result = {}                               " +
             "   for i,key in ipairs(KEYS) do                    " +
             "       result[i] = redis.call('hgetall',key)       " +
             "   end                                             " +
             "   return result;                                  ";
     private static String REDIS_HOST = Configuration.get("redisHost");
-    private final String SCRIPT_SHA;
-
-    // TODO: Should add health check for it in case failure when server start.
-    public QuestionnaireReportRepositoryRedis() {
-        Jedis jedis = new Jedis(REDIS_HOST);
-        SCRIPT_SHA = jedis.scriptLoad(LUA_SCRIPT);
-    }
+    private static String SCRIPT_SHA = "";
 
     public List<String> listQuestions(long questionnaireId) {
         Jedis jedis = new Jedis(REDIS_HOST);
@@ -46,8 +41,14 @@ public class QuestionnaireReportRepositoryRedis {
             keyArray[i] = QuestionReportRepositoryRedis.composeKey(questionnaireId, Long.parseLong(questions.get(i)));
         }
         // Here is one response sample: `[[556, 2, 667, 3], [555, 2, 666, 3]]`
-        List<List<String>> rawQuestionnaireReport =
-                (List<List<String>>) jedis.evalsha(SCRIPT_SHA, numberOfQuestions, keyArray);
+        List<List<String>> rawQuestionnaireReport;
+        try {
+            rawQuestionnaireReport = (List<List<String>>) jedis.evalsha(SCRIPT_SHA, numberOfQuestions, keyArray);
+        } catch (JedisNoScriptException e) {
+            SCRIPT_SHA = jedis.scriptLoad(LUA_SCRIPT);
+            log.warn("The script is not loaded, will load the script. The sha is {}.", SCRIPT_SHA);
+            rawQuestionnaireReport = (List<List<String>>) jedis.evalsha(SCRIPT_SHA, numberOfQuestions, keyArray);
+        }
         List<QuestionReport> questionReports = new LinkedList<>();
         for (int i = 0; i < rawQuestionnaireReport.size(); ++i) {
             List<String> rawQuestionReport = rawQuestionnaireReport.get(i);

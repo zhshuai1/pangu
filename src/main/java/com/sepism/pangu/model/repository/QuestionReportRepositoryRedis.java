@@ -14,7 +14,7 @@ public class QuestionReportRepositoryRedis {
     private static String REDIS_HOST = Configuration.get("redisHost");
 
     // No modifier to make it a package level api
-    static String composeKey(long questionnaireId, long questionId) {
+    public static String composeKey(long questionnaireId, long questionId) {
         return "answer:" + questionnaireId + ":" + questionId;
     }
 
