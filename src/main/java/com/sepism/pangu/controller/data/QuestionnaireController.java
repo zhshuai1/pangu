@@ -20,7 +20,7 @@ public class QuestionnaireController {
     private QuestionnaireRepository questionnaireRepository;
 
     @ResponseBody
-    @RequestMapping(path = "/questionnaires/{id}", method = RequestMethod.GET, produces = MediaType
+    @RequestMapping(path = "/data/questionnaires/{id}", method = RequestMethod.GET, produces = MediaType
             .APPLICATION_JSON_UTF8_VALUE)
     @Transactional
     public String getQuestionnaire(@PathVariable long id) {
@@ -30,7 +30,7 @@ public class QuestionnaireController {
     }
 
     @ResponseBody
-    @RequestMapping(path = "/questionnaires/", method = RequestMethod.GET, produces = MediaType
+    @RequestMapping(path = "/data/questionnaires/", method = RequestMethod.GET, produces = MediaType
             .APPLICATION_JSON_UTF8_VALUE)
     @Transactional
     public String getQuestionnaires(@RequestParam(required = false) Integer page,

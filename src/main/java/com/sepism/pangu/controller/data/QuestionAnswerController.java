@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @Log4j2
 public class QuestionAnswerController {
-    @RequestMapping(path = "/questions", method = RequestMethod.POST, consumes = MediaType
+    @RequestMapping(path = "/data/questions", method = RequestMethod.POST, consumes = MediaType
             .APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String submitQuestion(@RequestBody String questionAnswer) {

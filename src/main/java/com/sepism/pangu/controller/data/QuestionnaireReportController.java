@@ -19,7 +19,7 @@ public class QuestionnaireReportController {
     @Autowired
     private QuestionnaireReportRepositoryRedis questionnaireReportRepositoryRedis;
 
-    @RequestMapping(path = "/reports/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/data/reports/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String getQuestionnaireReport(@PathVariable long id) {
         return GSON.toJson(questionnaireReportRepositoryRedis.findOne(id));

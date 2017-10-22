@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Log4j2
 public class QuestionnaireAnswerController {
 
-    @RequestMapping(path = "/questionnaires", method = RequestMethod.POST, consumes = MediaType
+    @RequestMapping(path = "/data/questionnaires", method = RequestMethod.POST, consumes = MediaType
             .APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String submitQuestionnaire(@RequestBody String questionnaireAnswer) {

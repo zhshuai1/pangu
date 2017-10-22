@@ -54,7 +54,7 @@ questionnaireApp
             // So if we just put the $http in the controller, it will called before angular binding qnid for the scope
             // and controller. We will get an undefined.
             this.$postLink = function () {
-                $http.get('/questionnaires/' + self.questionnaireId).then(function (response) {
+                $http.get('/data/questionnaires/' + self.questionnaireId).then(function (response) {
                     if (!response.data) {
                         // The requested questionnaire does not exist.
                         self.notFound = true;
