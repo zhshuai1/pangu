@@ -25,6 +25,10 @@ public class QuestionnaireReportRepositoryRedis {
     private static String REDIS_HOST = Configuration.get("redisHost");
     private static String SCRIPT_SHA = "";
 
+    public static String composePattern(long questionnaireId) {
+        return "qsInQn:" + questionnaireId;
+    }
+
     public List<String> listQuestions(long questionnaireId) {
         Jedis jedis = new Jedis(REDIS_HOST);
         return jedis.lrange(composePattern(questionnaireId), 0, -1);
@@ -67,9 +71,5 @@ public class QuestionnaireReportRepositoryRedis {
         return QuestionnaireReport.builder()
                 .questionnaireId(questionnaireId)
                 .questionReports(questionReports).build();
-    }
-
-    private String composePattern(long questionnaireId) {
-        return "qsInQn:" + questionnaireId;
     }
 }

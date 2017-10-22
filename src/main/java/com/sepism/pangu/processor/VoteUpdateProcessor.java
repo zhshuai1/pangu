@@ -3,12 +3,14 @@ package com.sepism.pangu.processor;
 import com.sepism.pangu.model.DbRedisConverter;
 import com.sepism.pangu.model.answer.QuestionAnswer;
 import com.sepism.pangu.model.questionnaire.Question;
+import com.sepism.pangu.model.repository.QuestionnaireReportRepositoryRedis;
 import com.sepism.pangu.util.Configuration;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 import redis.clients.jedis.exceptions.JedisNoScriptException;
 
 import java.util.*;
@@ -94,8 +96,9 @@ public class VoteUpdateProcessor {
         String[] luaArgvs = prepareRedisArgvs(keysToUpdate, redisArgvs);
         Jedis jedis = new Jedis(REDIS_HOST);
 
-        String[] config = getConfig(type);
+        updateQuestionsInQuestionnaire(questions, jedis);
 
+        String[] config = getConfig(type);
         Object result;
         try {
             result = jedis.evalsha(config[1], keysToUpdate.size(), luaArgvs);
@@ -160,6 +163,19 @@ public class VoteUpdateProcessor {
             default:
                 throw new UnsupportedOperationException("This type is not supported");
         }
+    }
+
+    private void updateQuestionsInQuestionnaire(List<Question> questions, Jedis jedis) {
+        long questionnaireId = questions.get(0).getQuestionnaireId();
+        String key = QuestionnaireReportRepositoryRedis.composePattern(questionnaireId);
+        String[] questionIds = new String[questions.size()];
+        for (int i = 0; i < questions.size(); ++i) {
+            questionIds[i] = String.valueOf(questions.get(i).getId());
+        }
+        Transaction transaction = jedis.multi();
+        transaction.del(key);
+        transaction.lpush(key, questionIds);
+        transaction.exec();
     }
 
     private enum Type {
