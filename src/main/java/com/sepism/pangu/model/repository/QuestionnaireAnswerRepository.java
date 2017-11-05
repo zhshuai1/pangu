@@ -15,7 +15,7 @@ public interface QuestionnaireAnswerRepository extends JpaRepository<Questionnai
     List<QuestionnaireAnswer> findByQuestionnaireIdAndUserIdAndCurrent(long questionnaireId, long userId,
                                                                        boolean current);
 
-    Page<QuestionnaireAnswer> findByQuestionnaireIdAndCurrent(long questionnaireId, boolean current, Pageable page);
+    List<QuestionnaireAnswer> findByQuestionnaireIdAndCurrent(long questionnaireId, boolean current);
 
     Page<QuestionnaireAnswer> findByCurrentIsTrue(Pageable page);
 }

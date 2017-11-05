@@ -3,7 +3,9 @@ package com.sepism.pangu.processor;
 import com.sepism.pangu.model.DbRedisConverter;
 import com.sepism.pangu.model.answer.QuestionAnswer;
 import com.sepism.pangu.model.questionnaire.Question;
+import com.sepism.pangu.model.repository.QuestionnaireHotRepositoryRedis;
 import com.sepism.pangu.model.repository.QuestionnaireReportRepositoryRedis;
+import com.sepism.pangu.model.repository.ReportHotRepositoryRedis;
 import com.sepism.pangu.util.Configuration;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,15 +23,23 @@ import java.util.stream.Collectors;
 @Log4j2
 public class VoteUpdateProcessor {
     private static final String REDIS_HOST = Configuration.get("redisHost");
+
+    /**
+     * The request parameters should be like this:
+     * evalsha hash answer:1000:1999 (key1) answer:1000:2000(key2) 2 (entry number for key1) 19998 1 19999 2 1(entry
+     * number for key2) 56 3
+     */
     private static final String REDIS_INCREMENTAL_UPDATE_SCRIPT = "" +
             "local index = 1\n" +
             "local result = {}\n" +
+            "local last = table.getn(ARGV)\n" +
             "for i, key in ipairs(KEYS) do\n" +
             "    local argc = ARGV[index]\n" +
             "    index = index + 1\n" +
             "    local s, e = index, index + argc * 2 - 1\n" +
             "    index = e + 1\n" +
             "    result[i] = {}\n" +
+            "    redis.call('hincrby',key,'total',ARGV[last])\n" +
             "    for j = s, e, 2 do\n" +
             "        result[i][j] = redis.call('hincrby',key,ARGV[j],ARGV[j+1])\n" +
             "    end\n" +
@@ -38,6 +48,7 @@ public class VoteUpdateProcessor {
     private static final String REDIS_FULL_UPDATE_SCRIPT = "" +
             "local index = 1\n" +
             "local result = {}\n" +
+            "local last = table.getn(ARGV)\n" +
             "for i, key in ipairs(KEYS) do\n" +
             "    redis.call('del',key)\n" +  // Should delete all the records before
             "    local argc = ARGV[index]\n" +
@@ -45,6 +56,7 @@ public class VoteUpdateProcessor {
             "    local s, e = index, index + argc * 2 - 1\n" +
             "    index = e + 1\n" +
             "    result[i] = {}\n" +
+            "    redis.call('hincrby',key,'total',ARGV[last])\n" +
             "    for j = s, e, 2 do\n" +
             "        result[i][j] = redis.call('hset',key,ARGV[j],ARGV[j+1])\n" +
             "    end\n" +
@@ -53,22 +65,27 @@ public class VoteUpdateProcessor {
     private String[] FULL_UPDATE_CONFIG = new String[]{REDIS_FULL_UPDATE_SCRIPT, ""};
     private String[] INCREMENTAL_UPDATE_CONFIG = new String[]{REDIS_INCREMENTAL_UPDATE_SCRIPT, ""};
 
-    public void updateVotesFullQuantity(List<QuestionAnswer> currentAnswers, List<Question> questions) {
-        updateVotes(null, currentAnswers, questions, Type.FULL);
+    public void updateVotesFullQuantity(List<QuestionAnswer> currentAnswers, List<Question> questions, int increaseTotal) {
+        // TODO: This should be merged to the lua script, but considering it only called when load from db offline,
+        // this is not a big issue;
+        long questionnaireId = currentAnswers.get(0).getQuestionnaireId();
+        new ReportHotRepositoryRedis().updateHot(questionnaireId);
+        new QuestionnaireHotRepositoryRedis().updateHot(questionnaireId);
+        updateVotes(null, currentAnswers, questions, Type.FULL, increaseTotal);
     }
 
     public void updateVotesIncremental(List<QuestionAnswer> formerAnswers, List<QuestionAnswer> newAnswers,
                                        List<Question> questions) {
-        updateVotes(formerAnswers, newAnswers, questions, Type.INCREMENTAL);
+        int increaseTotal = CollectionUtils.isEmpty(formerAnswers) ? 1 : 0;
+        updateVotes(formerAnswers, newAnswers, questions, Type.INCREMENTAL, increaseTotal);
     }
 
     private void updateVotes(List<QuestionAnswer> formerAnswers, List<QuestionAnswer> newAnswers,
-                             List<Question> questions, Type type) {
+                             List<Question> questions, Type type, int increaseTotal) {
         if (CollectionUtils.isEmpty(newAnswers) || CollectionUtils.isEmpty(questions)) {
             log.warn("The newAnswers is {}, and questions is {}, either is empty", newAnswers, questions);
             return;
         }
-
         Map<Long, Question> index =
                 questions.stream().collect(Collectors.toMap(Question::getId, Function.identity()));
         Map<String, Map<String, Long>> redisEntries = new HashMap<>();
@@ -93,7 +110,7 @@ public class VoteUpdateProcessor {
 
         log.info("keys: {}, args {}", keysToUpdate, redisArgvs);
 
-        String[] luaArgvs = prepareRedisArgvs(keysToUpdate, redisArgvs);
+        String[] luaArgvs = prepareRedisArgvs(keysToUpdate, redisArgvs, increaseTotal);
         Jedis jedis = new Jedis(REDIS_HOST);
 
         updateQuestionsInQuestionnaire(questions, jedis);
@@ -140,8 +157,9 @@ public class VoteUpdateProcessor {
         }
     }
 
-    private String[] prepareRedisArgvs(List<String> keysToUpdate, List<String> redisArgvs) {
-        String[] luaArgvs = new String[keysToUpdate.size() + redisArgvs.size()];
+    private String[] prepareRedisArgvs(List<String> keysToUpdate, List<String> redisArgvs, int increaseTotal) {
+        int size = keysToUpdate.size() + redisArgvs.size() + 1;
+        String[] luaArgvs = new String[size];
         int luaArgvIndex = 0;
 
         // Must use index to access the array, since the order does matter.
@@ -151,6 +169,7 @@ public class VoteUpdateProcessor {
         for (int i = 0; i < redisArgvs.size(); ++i, ++luaArgvIndex) {
             luaArgvs[luaArgvIndex] = redisArgvs.get(i);
         }
+        luaArgvs[size - 1] = String.valueOf(increaseTotal);
         return luaArgvs;
     }
 

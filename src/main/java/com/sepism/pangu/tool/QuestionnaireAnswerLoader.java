@@ -8,7 +8,6 @@ import com.sepism.pangu.model.repository.QuestionnaireRepository;
 import com.sepism.pangu.processor.VoteUpdateProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.data.domain.PageRequest;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -17,19 +16,25 @@ import java.util.List;
 public class QuestionnaireAnswerLoader {
     @Transactional
     public static void main(String[] args) {
-        VoteUpdateProcessor voteUpdateProcessor = new VoteUpdateProcessor();
         ApplicationContext context = new FileSystemXmlApplicationContext
                 ("./src/main/webapp/WEB-INF/persistence-context.xml");
         QuestionnaireAnswerRepository questionnaireAnswerRepository =
                 context.getBean("questionnaireAnswerRepository", QuestionnaireAnswerRepository.class);
         QuestionnaireRepository questionnaireRepository =
                 context.getBean("questionnaireRepository", QuestionnaireRepository.class);
+
+        updateOneQuestionnaire(questionnaireAnswerRepository, questionnaireRepository, 1000l);
+    }
+
+    private static void updateOneQuestionnaire(QuestionnaireAnswerRepository questionnaireAnswerRepository,
+                                               QuestionnaireRepository questionnaireRepository, long questionnaireId) {
+        VoteUpdateProcessor voteUpdateProcessor = new VoteUpdateProcessor();
         List<QuestionnaireAnswer> questionnaireAnswers = questionnaireAnswerRepository
-                .findByQuestionnaireIdAndCurrent(1000l, true, new PageRequest(0, 1000)).getContent();
-        Questionnaire questionnaire = questionnaireRepository.findOne(1000l);
+                .findByQuestionnaireIdAndCurrent(questionnaireId, true);
+
+        Questionnaire questionnaire = questionnaireRepository.findOne(questionnaireId);
         List<QuestionAnswer> questionAnswers = new ArrayList<>();
         questionnaireAnswers.stream().forEach(qna -> questionAnswers.addAll(qna.getQuestionAnswers()));
-        voteUpdateProcessor.updateVotesFullQuantity(questionAnswers, questionnaire.getQuestions());
-
+        voteUpdateProcessor.updateVotesFullQuantity(questionAnswers, questionnaire.getQuestions(), questionnaireAnswers.size());
     }
 }
