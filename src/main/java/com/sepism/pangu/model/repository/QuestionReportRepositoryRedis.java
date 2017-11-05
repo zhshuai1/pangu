@@ -13,7 +13,6 @@ import java.util.Map;
 public class QuestionReportRepositoryRedis {
     private static String REDIS_HOST = Configuration.get("redisHost");
 
-    // No modifier to make it a package level api
     public static String composeKey(long questionnaireId, long questionId) {
         return "answer:" + questionnaireId + ":" + questionId;
     }
