@@ -1,62 +1,145 @@
-var viewQuestionnairesApp = angular.module("showReportApp", []);
+var viewQuestionnairesApp = angular.module('showReportApp', []);
 viewQuestionnairesApp
-    .controller("showReportController", ["$scope", "$http", function ($scope, $http) {
-
-        $scope.questionReports = [
-            {questionId: 1999, counts: {19999: 3}},
-            {questionId: 2000, counts: {20: 3}},
-            {questionId: 2001, counts: {20: 3}}];
+    .controller('showReportController', ['$scope', '$http', function ($scope, $http) {
     }])
-    .directive('onFinishRenderFilters', ['$timeout', function ($timeout) {
-        return {
-            restrict: 'A',
-            link: function (scope) {
-                $timeout(function () {
-                    scope.$broadcast('ngRepeatFinished');
+    .component('questionnaireReport', {
+        template: "" +
+        "<h1>{{$ctrl.questionnaireTitle}}</h1>" +
+        "<ul ng-cloak class='ng-cloak reports'>" +
+        "   <li class='report-box' ng-repeat='report in $ctrl.questionReports'>" +
+        "       <question-report report-data='report' question-info='$ctrl.questionInfoMap[report.questionId]'></question-report>" +
+        "   </li>" +
+        "</ul>",
+        bindings: {
+            reportId: '=',
+        },
+        controller: ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+            var self = this;
+            this.$postLink = function () {
+                $http.get('/data/reports/' + self.reportId).then(function (response) {
+                    self.questionReports = response.data.questionReports;
+                }, function () {
+                    alert('获取报告数据失败！');
                 });
 
+                $http.get('/data/questionnaires/' + this.reportId).then(function (response) {
+                    var data = response.data;
+                    self.questionnaireTitle = data.titleCn;
+                    self.questionInfoMap = {};
+                    data.questions.forEach(q => self.questionInfoMap[q.id] = q);
+                    $timeout(function () {
+                        $scope.$broadcast('questionnaireReportReady')
+                    });
+                }, function () {
+                    alert("获取问卷信息失败！");
+                });
+            };
+        }],
+    })
+    .directive("questionReport", ['$timeout', function ($timeout) {
+            function buildReportWithChoicesData(questionInfo, reportData) {
+                var counts = reportData.counts;
+                var choices = questionInfo.choices;
+                var reports = [];
+                for (var i in choices) {
+                    reports[i] = {
+                        label: choices[i].descriptionCn,
+                        count: counts[choices[i].id],
+                    };
+                }
+                return reports;
             }
-        };
-    }])
-    .directive("report", ['$http', function ($http) {
+
+            function buildIntegerData(reportData) {
+                var counts = reportData.counts;
+                var min = +Infinity, max = -Infinity;
+                for (var n in counts) {
+                    // if n is not a number, and k is a number, +n>k || +n<k === false
+                    max = +n > max ? +n : max;
+                    min = +n < min ? +n : min;
+                }
+                var numberOfBar = 7;
+                var interval = (max - min + 1) / numberOfBar;
+
+                var reports = [];
+                for (var i = 0; i < numberOfBar; ++i) {
+                    // used to identify the label for each bar. i.e. 34-45
+                    reports[i] = {
+                        label: '' + Math.floor(min + interval * i) + '-' + Math.floor(min + interval * (i + 1)),
+                        count: 0,
+                    };
+                }
+                for (var k in counts) {
+                    var key = +k;
+                    if (!(key > -Infinity)) {
+                        continue;
+                    }
+                    var index = Math.floor((key - min) / interval);
+                    console.log("The index is : " + index);
+                    reports[index]['count'] += +counts[k];
+                }
+                return reports;
+            }
+
+            function buildReportData(questionInfo, reportData) {
+                switch (questionInfo.type) {
+                    case 'INTEGER':
+                        return buildIntegerData(reportData);
+                    case 'RADIO':
+                    case 'CHECKBOX':
+                        return buildReportWithChoicesData(questionInfo, reportData);
+                    default:
+                        return [];
+                        break;
+                }
+            }
+
             function link(scope, element, attributes, controller, transcludeFn) {
-                scope.$on('ngRepeatFinished', function () {
-                    var id = scope.reportData.questionId;
-                    var myChart = echarts.init(document.getElementById("" + id));
+                var process = function () {
+                    var reportData = scope.reportData;
+                    var questionInfo = scope.questionInfo;
+                    console.log("The question info is: ")
+                    console.log(questionInfo);
+                    var reports = buildReportData(questionInfo, reportData);
+                    console.log(reports);
+                    var sData = reports.map(r => r.count / reportData.counts.total);
+                    var xData = reports.map(r => r.label);
+                    var chart = echarts.init(document.getElementById("" + reportData.questionId));
                     var option = {
                         title: {
-                            text: 'ECharts 入门示例'
+                            text: questionInfo.titleCn,
                         },
                         tooltip: {},
                         legend: {
-                            data: ['销量', '销售额']
+                            data: ['比例'],
                         },
                         xAxis: {
-                            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                            data: xData,
                         },
                         yAxis: {},
                         series: [{
-                            name: '销量',
+                            name: '比例',
                             type: 'bar',
-                            data: [5, 20, 36, 10, 10, 20]
-                        }, {
-                            name: '销售额',
-                            type: 'bar',
-                            data: [5, 20, 36, 10, 10, 20]
-                        },
-                        ]
+                            data: sData,
+                        }]
                     };
 
-                    myChart.setOption(option);
+                    chart.setOption(option);
+                }
+                scope.$on('questionnaireReportReady', function () {
+                    $timeout(process);
                 });
             }
 
             return {
                 template: "<a href='#'></href><div id='{{reportData.questionId}}'></div></a>",
                 scope: {
-                    reportData: "=",
+                    reportData: '=',
+                    questionInfo: '=',
                 },
                 link: link,
             }
-        }]
+        }
+
+        ]
     );

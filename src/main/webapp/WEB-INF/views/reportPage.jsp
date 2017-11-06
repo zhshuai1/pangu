@@ -43,7 +43,7 @@
             outline: 1px red solid;
         }
 
-        .report-box > report > a > div {
+        .report-box > question-report > a > div {
             width: 300px;
             height: 280px;
             margin: 0 20px 20px 30px;
@@ -55,11 +55,7 @@
 
 <div class="container" ng-app="showReportApp">
     <div class="jumbotron questionnaire-list" ng-controller="showReportController">
-        <ul ng-cloak class="ng-cloak reports">
-            <li class="report-box" ng-repeat="report in questionReports" on-finish-render-filters>
-                <report report-data="report"></report>
-            </li>
-        </ul>
+        <questionnaire-report report-id=<%=request.getAttribute("id")%>></questionnaire-report>
     </div>
 </div>
 
