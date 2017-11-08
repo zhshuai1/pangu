@@ -181,7 +181,7 @@ questionnaireApp
                 if (self.level - 1 == i) {
                     self.value = self.data[i].selected;
                 } else {
-                    $http.get('/choices/' + self.data[i].selected).then(function (response) {
+                    $http.get('/data/choices/' + self.data[i].selected).then(function (response) {
                         self.data[i + 1].candidates = response.data;
                     });
                     self.value = null;
@@ -197,62 +197,12 @@ questionnaireApp
                 for (var i = 0; i < self.level; ++i) {
                     self.data.push({candidates: [], selected: ""});
                 }
-                $http.get('/choices/' + self.root).then(function (response) {
+                $http.get('/data/choices/' + self.root).then(function (response) {
                     self.data[0].candidates = response.data;
                     self.data[0].selected = "";
                 });
             }
 
-        }],
-    })
-    //TODO: Since I have implementated a multi-select component, will deprecate this component.
-    // I will implement address and date as components first, because they are complex enough. To keep consistency,
-    // maybe I should implement all basic elements as components, such as radio, checkbox and so on.
-    .component("address", {
-        template: "<div class='sep-select'><input type='hidden' name='{{$ctrl.formName}}' value='{{$ctrl.selectedDistrict}}'>" +
-        "<div class='btn-group btn-group-vertical'><select class='btn btn-default' ng-model='$ctrl.selectedCountry' ng-change='$ctrl.updateProvinces()'><option ng-repeat='country in $ctrl.countries' value='{{country.id}}'>{{country[$ctrl.description]}}</option></select>" +
-        "<select class='btn btn-default' ng-model='$ctrl.selectedProvince' ng-change='$ctrl.updateCities()'><option ng-repeat='province in $ctrl.provinces' value='{{province.id}}'>{{province[$ctrl.description]}}</option></select>" +
-        "<select class='btn btn-default' ng-model='$ctrl.selectedCity' ng-change='$ctrl.updateDistricts()'><option ng-repeat='city in $ctrl.cities' value='{{city.id}}'>{{city[$ctrl.description]}}</option></select>" +
-        "<select class='btn btn-default' ng-model='$ctrl.selectedDistrict'><option ng-repeat='district in $ctrl.districts' value='{{district.id}}'>{{district[$ctrl.description]}}</option></select></div></div>",
-        bindings: {
-            root: '<',
-            level: '<',
-            locale: '<',
-            formName: '<',
-        },
-        controller: ['$http', function ($http) {
-            var self = this;
-
-            this.updateProvinces = function () {
-                $http.get('/choices/' + self.selectedCountry).then(function (response) {
-                    self.provinces = response.data;
-                    self.selectedCity = "";
-                    self.districts = [];
-                });
-            }
-
-            this.updateCities = function () {
-                $http.get('/choices/' + self.selectedProvince).then(function (response) {
-                    self.cities = response.data;
-                    self.districts = [];
-                });
-            }
-            this.updateDistricts = function () {
-                $http.get('/choices/' + self.selectedCity).then(function (response) {
-                    self.districts = response.data;
-                });
-            }
-
-            this.$postLink = function () {
-                var level = self.level;
-                var root = self.root;
-                $http.get('/choices/' + root).then(function (response) {
-                    self.countries = response.data;
-                });
-                self.description = "description" + self.locale;
-                self.selectedCountry = "100";
-                this.updateProvinces();
-            }
         }],
     })
     .component("date", {
