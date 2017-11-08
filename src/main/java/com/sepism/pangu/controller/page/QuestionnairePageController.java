@@ -52,11 +52,12 @@ public class QuestionnairePageController {
 
     @RequestMapping(path = "/questionnairePage/{id}", method = RequestMethod.GET)
     public String getQuestionnairePage(@PathVariable String id, HttpServletRequest request, Model model) {
-        log.info("user is accessing the questionnaire submission page.");
+        log.info("user is accessing the questionnaire page, the questionnaireId is {}", id);
         if (!(boolean) request.getAttribute(RequestAttribute.LOGGED_IN)) {
             log.info("The user did not login yet, will redirect to login page");
             return "redirect:/login?redirectUrl=" + URLEncoder.encode("/questionnairePage/" + id);
         }
+
         model.addAttribute("id", id);
         return "questionnairePage";
     }

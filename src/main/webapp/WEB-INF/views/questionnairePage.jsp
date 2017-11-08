@@ -37,7 +37,7 @@
 <%@include file="head.jsp" %>
 <div id="main">
     <div class="questionnaire" ng-app="questionnaireApp">
-        <questionnaire locale="'Cn'" questionnaire-id="<%=request.getAttribute("id")%>"
+        <questionnaire locale="'Cn'" questionnaire-id="'<%=request.getAttribute("id")%>'"
                        target-url="'/submit-questionnaire'"></questionnaire>
     </div>
 </div>

@@ -30,10 +30,21 @@ public class QuestionnaireController {
     @RequestMapping(path = "/data/questionnaires/{id}", method = RequestMethod.GET, produces = MediaType
             .APPLICATION_JSON_UTF8_VALUE)
     @Transactional
-    public String getQuestionnaire(@PathVariable long id) {
+    public String getQuestionnaire(@PathVariable String id) {
         log.info("Getting questionnaire for {}", id);
-        Questionnaire questionnaire = questionnaireRepository.findOne(id);
-        return new Gson().toJson(questionnaire);
+        // The update hot logic should not impact the user.
+        Questionnaire questionnaire = null;
+        try {
+            long questionnaireId = Long.parseLong(id);
+            questionnaire = questionnaireRepository.findOne(questionnaireId);
+            if (questionnaire != null) {
+                questionnaireHotRepositoryRedis.incrReadHotBy(questionnaireId, 1);
+            }
+        } catch (Exception e) {
+            log.warn("Failed to retrieve questionnaire for Id {}", id, e);
+        } finally {
+            return new Gson().toJson(questionnaire);
+        }
     }
 
     @ResponseBody

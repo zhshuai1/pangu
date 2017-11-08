@@ -70,7 +70,6 @@ public class VoteUpdateProcessor {
             log.info("The questionnaire contains no question.");
             return;
         }
-        long questionnaireId = questions.get(0).getQuestionnaireId();
         updateVotes(null, currentAnswers, questions, Type.FULL, increaseTotal);
     }
 
