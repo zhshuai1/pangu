@@ -4,7 +4,9 @@ import com.sepism.pangu.model.answer.QuestionAnswer;
 import com.sepism.pangu.model.answer.QuestionnaireAnswer;
 import com.sepism.pangu.model.questionnaire.Questionnaire;
 import com.sepism.pangu.model.repository.QuestionnaireAnswerRepository;
+import com.sepism.pangu.model.repository.QuestionnaireHotRepositoryRedis;
 import com.sepism.pangu.model.repository.QuestionnaireRepository;
+import com.sepism.pangu.model.repository.ReportHotRepositoryRedis;
 import com.sepism.pangu.processor.VoteUpdateProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -23,7 +25,9 @@ public class QuestionnaireAnswerLoader {
         QuestionnaireRepository questionnaireRepository =
                 context.getBean("questionnaireRepository", QuestionnaireRepository.class);
 
-        updateOneQuestionnaire(questionnaireAnswerRepository, questionnaireRepository, 1000l);
+        long questionnaireId = 1001l;
+        updateOneQuestionnaire(questionnaireAnswerRepository, questionnaireRepository, questionnaireId);
+        updateHot(questionnaireId);
     }
 
     private static void updateOneQuestionnaire(QuestionnaireAnswerRepository questionnaireAnswerRepository,
@@ -36,5 +40,10 @@ public class QuestionnaireAnswerLoader {
         List<QuestionAnswer> questionAnswers = new ArrayList<>();
         questionnaireAnswers.stream().forEach(qna -> questionAnswers.addAll(qna.getQuestionAnswers()));
         voteUpdateProcessor.updateVotesFullQuantity(questionAnswers, questionnaire.getQuestions(), questionnaireAnswers.size());
+    }
+
+    private static void updateHot(long questionnaireId) {
+        new ReportHotRepositoryRedis().updateHot(questionnaireId);
+        new QuestionnaireHotRepositoryRedis().updateHot(questionnaireId);
     }
 }

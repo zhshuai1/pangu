@@ -3,9 +3,7 @@ package com.sepism.pangu.processor;
 import com.sepism.pangu.model.DbRedisConverter;
 import com.sepism.pangu.model.answer.QuestionAnswer;
 import com.sepism.pangu.model.questionnaire.Question;
-import com.sepism.pangu.model.repository.QuestionnaireHotRepositoryRedis;
 import com.sepism.pangu.model.repository.QuestionnaireReportRepositoryRedis;
-import com.sepism.pangu.model.repository.ReportHotRepositoryRedis;
 import com.sepism.pangu.util.Configuration;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -68,9 +66,11 @@ public class VoteUpdateProcessor {
     public void updateVotesFullQuantity(List<QuestionAnswer> currentAnswers, List<Question> questions, int increaseTotal) {
         // TODO: This should be merged to the lua script, but considering it only called when load from db offline,
         // this is not a big issue;
-        long questionnaireId = currentAnswers.get(0).getQuestionnaireId();
-        new ReportHotRepositoryRedis().updateHot(questionnaireId);
-        new QuestionnaireHotRepositoryRedis().updateHot(questionnaireId);
+        if (CollectionUtils.isEmpty(questions)) {
+            log.info("The questionnaire contains no question.");
+            return;
+        }
+        long questionnaireId = questions.get(0).getQuestionnaireId();
         updateVotes(null, currentAnswers, questions, Type.FULL, increaseTotal);
     }
 
