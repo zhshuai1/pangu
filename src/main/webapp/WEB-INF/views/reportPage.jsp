@@ -55,7 +55,7 @@
 
 <div class="container" ng-app="showReportApp">
     <div class="jumbotron questionnaire-list" ng-controller="showReportController">
-        <questionnaire-report report-id=<%=request.getAttribute("id")%>></questionnaire-report>
+        <questionnaire-report report-id="'<%=request.getAttribute("id")%>'"></questionnaire-report>
     </div>
 </div>
 

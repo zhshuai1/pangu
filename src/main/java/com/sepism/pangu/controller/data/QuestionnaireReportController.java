@@ -1,11 +1,13 @@
 package com.sepism.pangu.controller.data;
 
 import com.google.gson.Gson;
+import com.sepism.pangu.model.answer.QuestionnaireReport;
 import com.sepism.pangu.model.repository.QuestionnaireReportRepositoryRedis;
 import com.sepism.pangu.model.repository.ReportHotRepositoryRedis;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -20,10 +22,19 @@ public class QuestionnaireReportController {
 
     @RequestMapping(path = "/data/reports/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String getQuestionnaireReport(@PathVariable long id) {
+    public String getQuestionnaireReport(@PathVariable String id) {
         log.info("User is requesting to view report {}.", id);
-        reportHotRepositoryRedis.incrReadHotBy(id, 1);
-        return GSON.toJson(questionnaireReportRepositoryRedis.findOne(id));
+        QuestionnaireReport questionnaireReport = null;
+        try {
+            long questionnaireId = Long.parseLong(id);
+            questionnaireReport = questionnaireReportRepositoryRedis.findOne(questionnaireId);
+            if (!CollectionUtils.isEmpty(questionnaireReport.getQuestionReports())) {
+                reportHotRepositoryRedis.incrReadHotBy(questionnaireId, 1);
+            }
+        } catch (Exception e) {
+            log.warn("Failed to retrieve and update hot for report {}", id, e);
+        }
+        return GSON.toJson(questionnaireReport);
     }
 
     @RequestMapping(path = "/data/reports", method = RequestMethod.GET)

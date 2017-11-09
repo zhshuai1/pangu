@@ -4,12 +4,17 @@ viewQuestionnairesApp
     }])
     .component('questionnaireReport', {
         template: "" +
-        "<h1>{{$ctrl.questionnaireTitle}}</h1>" +
-        "<ul ng-cloak class='ng-cloak reports'>" +
-        "   <li class='report-box' ng-repeat='report in $ctrl.questionReports'>" +
-        "       <question-report report-data='report' question-info='$ctrl.questionInfoMap[report.questionId]'></question-report>" +
-        "   </li>" +
-        "</ul>",
+        "<div ng-if='$ctrl.questionReports'>" +
+        "   <h1>{{$ctrl.questionnaireTitle}}</h1>" +
+        "   <ul ng-cloak class='ng-cloak reports'>" +
+        "       <li class='report-box' ng-repeat='report in $ctrl.questionReports'>" +
+        "           <question-report report-data='report' question-info='$ctrl.questionInfoMap[report.questionId]'></question-report>" +
+        "       </li>" +
+        "   </ul>" +
+        "</div>" +
+        "<div ng-if='$ctrl.notFound'>" +
+        "   <h1>您访问的问卷报告走丢了...</h1>" +
+        "</div>",
         bindings: {
             reportId: '=',
         },
@@ -17,22 +22,27 @@ viewQuestionnairesApp
             var self = this;
             this.$postLink = function () {
                 $http.get('/data/reports/' + self.reportId).then(function (response) {
+                    if (!response.data || response.data.length == 0) {
+                        self.notFound = true;
+                        return;
+                    }
                     self.questionReports = response.data.questionReports;
+                    $http.get('/data/questionnaires/' + self.reportId).then(function (response) {
+                        var data = response.data;
+                        self.questionnaireTitle = data.titleCn;
+                        self.questionInfoMap = {};
+                        data.questions.forEach(q => self.questionInfoMap[q.id] = q);
+                        $timeout(function () {
+                            $scope.$broadcast('questionnaireReportReady')
+                        });
+                    }, function () {
+                        alert("获取问卷信息失败！");
+                    });
                 }, function () {
                     alert('获取报告数据失败！');
                 });
 
-                $http.get('/data/questionnaires/' + this.reportId).then(function (response) {
-                    var data = response.data;
-                    self.questionnaireTitle = data.titleCn;
-                    self.questionInfoMap = {};
-                    data.questions.forEach(q => self.questionInfoMap[q.id] = q);
-                    $timeout(function () {
-                        $scope.$broadcast('questionnaireReportReady')
-                    });
-                }, function () {
-                    alert("获取问卷信息失败！");
-                });
+
             };
         }],
     })

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Log4j2
 public class ReportPageController {
     @RequestMapping(path = "/reports/{id}", method = RequestMethod.GET)
-    public String getReportPage(@PathVariable long id, Model model) {
+    public String getReportPage(@PathVariable String id, Model model) {
         model.addAttribute("id", id);
         return "reportPage";
     }
