@@ -30,4 +30,7 @@ public class Questionnaire {
     //This is the internal-facing comment
     private String comment;
     private long hot;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cover")
+    private Question cover;
 }
