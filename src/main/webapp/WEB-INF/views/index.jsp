@@ -23,8 +23,30 @@
 <body>
 <%@ include file="head.jsp" %>
 <div class="container">
-    <div class="jumbotron">
+    <%--
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <h1>First Item</h1>
+            </div>
+            <div class="item">
+                <h1>Second Item</h1>
+            </div>
+            <div class="item">
+                <h1>Third Item</h1>
+            </div>
+        </div>
+        <a class="carousel-control left" href="#myCarousel"
+           data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel"
+           data-slide="next">&rsaquo;</a>
     </div>
+    --%>
 </div>
 <%@include file="foot.jsp" %>
 </body>

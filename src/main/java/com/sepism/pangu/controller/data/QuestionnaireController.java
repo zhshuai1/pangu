@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sepism.pangu.model.questionnaire.Questionnaire;
 import com.sepism.pangu.model.repository.QuestionnaireHotRepositoryRedis;
 import com.sepism.pangu.model.repository.QuestionnaireRepository;
+import com.sepism.pangu.model.repository.QuestionnaireRepositoryWrapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ public class QuestionnaireController {
     private static final Gson GSON = new Gson();
     @Autowired
     private QuestionnaireRepository questionnaireRepository;
+
+    @Autowired
+    private QuestionnaireRepositoryWrapper questionnaireRepositoryWrapper;
 
     @Autowired
     private QuestionnaireHotRepositoryRedis questionnaireHotRepositoryRedis;
@@ -62,7 +66,7 @@ public class QuestionnaireController {
         if (CollectionUtils.isEmpty(questionnaireIds)) {
             return GSON.toJson(Collections.emptyList());
         }
-        List<Questionnaire> questionnaires = questionnaireRepository.findByIdIn(questionnaireIds);
+        List<Questionnaire> questionnaires = questionnaireRepositoryWrapper.findIdTitleCnByIdIn(questionnaireIds);
         return GSON.toJson(questionnaires);
     }
 }

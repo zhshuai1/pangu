@@ -1,7 +1,6 @@
 package com.sepism.pangu.model.questionnaire;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "questionnaires")
 public class Questionnaire {
     @Id

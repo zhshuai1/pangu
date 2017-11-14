@@ -4,8 +4,9 @@ import com.sepism.pangu.util.Configuration;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class ReportHotRepositoryRedis {
@@ -38,8 +39,8 @@ public class ReportHotRepositoryRedis {
         jedis.zadd(REPORT_RANK_KEY, score / 2 + pr, String.valueOf(reprotId));
     }
 
-    public Set<String> findIdsByRankRange(long start, long end) {
+    public List<Long> findIdsByRankRange(long start, long end) {
         Jedis jedis = new Jedis(REDIS_HOST);
-        return jedis.zrange(REPORT_RANK_KEY, start, end);
+        return jedis.zrange(REPORT_RANK_KEY, start, end).stream().map(Long::parseLong).collect(Collectors.toList());
     }
 }
