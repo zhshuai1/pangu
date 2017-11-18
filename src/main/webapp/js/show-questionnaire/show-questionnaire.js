@@ -2,19 +2,18 @@ function getFormData(selector) {
     var data = {};
     var arrayTypeData = [];
     $(selector).serializeArray().map(function (x) {
-        if (data[x.name] !== undefined) {
-            if (!data[x.name].push) {
-                data[x.name] = [data[x.name]];
-                arrayTypeData.push(x.name)
+        var name = x.name;
+        if ($('input[name=' + name + ']').attr('type') == 'checkbox') {
+            if (!data[name]) {
+                data[name] = [];
+                arrayTypeData.push(name);
             }
-            data[x.name].push(x.value || '');
+            data[name].push(x.value);
         } else {
-            data[x.name] = x.value || '';
+            data[name] = x.value;
         }
     });
-    arrayTypeData.forEach(function (x) {
-        data[x] = JSON.stringify(data[x]);
-    });
+    arrayTypeData.forEach(a => data[a] = JSON.stringify(data[a]));
     return data;
 }
 
