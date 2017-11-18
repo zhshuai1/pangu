@@ -5,7 +5,6 @@ import com.sepism.pangu.model.answer.QuestionAnswer;
 import com.sepism.pangu.model.questionnaire.Question;
 import com.sepism.pangu.model.repository.QuestionReportRepositoryRedis;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -32,9 +31,7 @@ public final class DbRedisConverter {
         }
         long questionnaireId = question.getQuestionnaireId();
         long questionId = question.getId();
-        if (StringUtils.isBlank(answer)) {
-            return null;
-        }
+
         String redisKey = QuestionReportRepositoryRedis.composeKey(questionnaireId, questionId);
         Pair<String, Map<String, Long>> result = new ImmutablePair<>(redisKey, new HashMap<>());
         Map<String, Long> right = result.getRight();

@@ -132,6 +132,10 @@ public class VoteUpdateProcessor {
             answers.stream().forEach(a -> {
                 Question question = index.get(a.getQuestionId());
                 Pair<String, Map<String, Long>> pair = DbRedisConverter.convert(a.getAnswer(), question);
+                if (pair == null) {
+                    log.warn("The returned pair is null, which should not happen.");
+                    return;
+                }
                 String left = pair.getLeft();
                 Map<String, Long> right = pair.getRight();
                 if (!increase) {
