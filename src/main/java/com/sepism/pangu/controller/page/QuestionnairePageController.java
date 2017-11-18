@@ -198,12 +198,17 @@ public class QuestionnairePageController {
                     questionnaireId, questionnaireAnswer.getId());
             newAnswers.addAll(questionnaireAnswer.getQuestionAnswers());
             executorService.submit(() -> {
-                        if (StringUtils.isNotBlank(formerAnswerString)) {
-                            formerAnswers.addAll(GSON.fromJson(formerAnswerString,
-                                    new TypeToken<List<QuestionAnswer>>() {
-                                    }.getType()));
-                        }
-                        voteUpdateProcessor.updateVotesIncremental(formerAnswers, newAnswers, questions);
+                try {
+                    if (StringUtils.isNotBlank(formerAnswerString)) {
+                        formerAnswers.addAll(GSON.fromJson(formerAnswerString,
+                                new TypeToken<List<QuestionAnswer>>() {
+                                }.getType()));
+                    }
+                    voteUpdateProcessor.updateVotesIncremental(formerAnswers, newAnswers, questions);
+                } catch (Exception e) {
+                    log.warn("The formerAnswers and new answers are: {}\n{}", formerAnswers, newAnswers);
+                    log.error("Exception encountered when updating the votes in redis", e);
+                }
                     }
             );
             log.info("Submit the task to executor service to update the votes asynchronously.");
