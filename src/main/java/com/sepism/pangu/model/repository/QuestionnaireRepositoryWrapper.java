@@ -19,10 +19,10 @@ public class QuestionnaireRepositoryWrapper {
                 (Collectors.toList());
     }
 
-    public List<Questionnaire> findIdCoverByIdIn(List<Long> questionnaireIds) {
-        List<Object[]> objects = questionnaireRepository.findIdCoverByIdIn(questionnaireIds);
-        return objects.stream().map(o -> Questionnaire.builder().id((long) o[0]).cover((Question) o[1]).build()).collect
-                (Collectors.toList());
+    public List<Questionnaire> findIdCoverTitleCnByIdIn(List<Long> questionnaireIds) {
+        List<Object[]> objects = questionnaireRepository.findIdCoverTitleCnByIdIn(questionnaireIds);
+        return objects.stream().map(o -> Questionnaire.builder().id((long) o[0]).cover((Question) o[1])
+                .titleCn((String) o[2]).build()).collect(Collectors.toList());
     }
 
 }

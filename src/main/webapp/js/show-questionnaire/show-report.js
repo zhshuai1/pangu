@@ -5,7 +5,7 @@ viewQuestionnairesApp
     .component('questionnaireReport', {
         template: "" +
         "<div ng-if='$ctrl.questionReports'>" +
-        "   <h1>{{$ctrl.questionnaireTitle}}</h1>" +
+        "   <h2>{{$ctrl.questionnaireTitle}}</h2>" +
         "   <ul ng-cloak class='ng-cloak reports'>" +
         "       <li class='report-box' ng-repeat='report in $ctrl.questionReports'>" +
         "           <question-report report-data='report' question-info='$ctrl.questionInfoMap[report.questionId]'></question-report>" +

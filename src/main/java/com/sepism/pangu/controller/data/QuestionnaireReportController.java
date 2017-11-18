@@ -9,6 +9,7 @@ import com.sepism.pangu.model.repository.ReportHotRepositoryRedis;
 import com.sepism.pangu.util.GsonUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,8 @@ public class QuestionnaireReportController {
     @Autowired
     private ReportHotRepositoryRedis reportHotRepositoryRedis;
 
-    @RequestMapping(path = "/data/reports/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/data/reports/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public String getQuestionnaireReport(@PathVariable String id) {
         log.info("User is requesting to view report {}.", id);
@@ -47,7 +49,8 @@ public class QuestionnaireReportController {
         return GSON.toJson(questionnaireReport);
     }
 
-    @RequestMapping(path = "/data/reports", method = RequestMethod.GET)
+    @RequestMapping(path = "/data/reports", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     @Transactional
     public String getHotQuestionnaireReports(@RequestParam(required = false) Integer pageNumber,
@@ -61,7 +64,7 @@ public class QuestionnaireReportController {
         if (CollectionUtils.isEmpty(questionnaireIds)) {
             return GSON.toJson(Collections.emptyList());
         }
-        List<Questionnaire> questionnaires = questionnaireRepositoryWrapper.findIdCoverByIdIn(questionnaireIds);
+        List<Questionnaire> questionnaires = questionnaireRepositoryWrapper.findIdCoverTitleCnByIdIn(questionnaireIds);
         return GsonUtil.getGson().toJson(questionnaires);
     }
 }

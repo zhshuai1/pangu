@@ -1,3 +1,4 @@
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@include file="common.jsp" %>
 <html>
 <head>
@@ -17,6 +18,10 @@
 
         .navbar {
             margin-bottom: 20px;
+        }
+
+        .questionnaire-list .btn {
+            text-align: left;
         }
     </style>
 </head>
@@ -47,11 +52,24 @@
            data-slide="next">&rsaquo;</a>
     </div>
     --%>
+    <div class="container" ng-app="viewQuestionnaireReportsApp">
+        <div class="jumbotron questionnaire-list" ng-controller="viewQuestionnaireReportsController">
+            <h2>热门数据</h2>
+            <ul ng-cloak class="ng-cloak">
+                <li ng-repeat="report in reports" class="btn btn-default form-control ">
+                    <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>
+                    <a href="/reports/{{report.id}}">{{report.titleCn}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <%@include file="foot.jsp" %>
 </body>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="/js/angular-1.6.4.js"></script>
+<script src="/js/show-questionnaire/view-reportlist.js"></script>
 <script>
 </script>
 </html>

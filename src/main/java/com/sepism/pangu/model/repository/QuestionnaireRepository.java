@@ -22,6 +22,6 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
 
     // The return result in fact is List<Object[]>, there is no compile/runtime error if return List<Questionnaire>.
     // Since at compilation, the compiler does not know the exact type; at runtime, there will be type erasure.
-    @Query("select qn.id, qn.cover from Questionnaire qn where qn.id in ?1")
-    List<Object[]> findIdCoverByIdIn(List<Long> questionnaireIds);
+    @Query("select qn.id, qn.cover, qn.titleCn from Questionnaire qn where qn.id in ?1")
+    List<Object[]> findIdCoverTitleCnByIdIn(List<Long> questionnaireIds);
 }
